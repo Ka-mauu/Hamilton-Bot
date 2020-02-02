@@ -214,5 +214,7 @@ async def _define(ctx, *, word:str):
         embed.add_field(name=f'Antonyms', value=f'{antonyms}', inline=False)
     await ctx.send(embed=embed)
 
+with open ("C:\\Users\\WT\\Downloads\\misc\\programming\\projects\\_DiscordHamiltonBot\\token.txt", "r") as tokenFile:
+    token = tokenFile.readlines()
 
-client.run('NjcyOTM1OTgwMjM1MjI3MTM3.XjdG6A.ulWXaV-4T8BdfZ5CQZjzuH6OKE8')
+client.run(token)
