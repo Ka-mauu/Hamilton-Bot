@@ -15,7 +15,7 @@ from discord.ext import commands
 from zalgo_text import zalgo
 
 # prefix(es)
-client = commands.Bot(command_prefix = ['ok. ', 'ok.'])
+client = commands.Bot(command_prefix = ['ok. ', 'ok.', 'ok!', 'ok! '])
 
 #config
 
@@ -89,7 +89,7 @@ async def _ping(ctx):
 @client.command(aliases=['restart'])
 async def _restart(ctx):
     # ghetto restart, can probably improve this
-    await ctx.send(f'Restarting...')
+    await ctx.send(f'I will come back...')
     os.startfile('C:\\Users\\WT\\Downloads\\misc\\programming\\projects\\_DiscordHamiltonBot\\Hamilton-Bot\\bot.py')
     sys.exit()
 
@@ -214,6 +214,7 @@ async def _define(ctx, *, word:str):
         embed.add_field(name=f'Antonyms', value=f'{antonyms}', inline=False)
     await ctx.send(embed=embed)
 
-token = open('C:\\Users\\WT\\Downloads\\misc\\programming\\projects\\_DiscordHamiltonBot\\token.txt', 'r').read()
+with open ("C:\\Users\\WT\\Downloads\\misc\\programming\\projects\\_DiscordHamiltonBot\\token.txt", "r") as tokenFile:
+    token = tokenFile.readlines()
 
 client.run(token)
