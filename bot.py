@@ -53,12 +53,12 @@ async def on_ready():
     print('Hello!')
     # update status
     await client.change_presence(status=discord.Status.online, activity= discord.Game(status))
-    await client.get_channel(672942729864413184).send(f'<:okHamiltonOwO:630553287111737354> I am online!')
+    await client.get_channel(672942729864413184).send(f'<:okHamiltonOwO:630553287111737354> I have awakened! Serve me and I shall return the favour.')
 
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        r = ['That is not a proper command..', 'I cannot perform a non-existent command.',  'Are you going to give me a command?']
+        r = ['That is not a proper command..', 'I cannot perform a non-existent request.', 'Are you going to give me something to do, or what?', 'I cannot just sit here idly, what do you want me to do?']
         await ctx.send(random.choice(r))
 
 
@@ -95,7 +95,7 @@ async def _restart(ctx):
 
 @client.command(aliases=['stop','die','kill','quit'])
 async def _stop(ctx):
-    await ctx.send(f'{Emoji.hamiltonEyeroll} Just for now..')
+    await ctx.send(f'{Emoji.hamiltonEyeroll} Just for now...')
     sys.exit()
 
 @client.command(aliases=['8ball', 'eightball'])
@@ -116,7 +116,7 @@ async def _8ball(ctx, *, question:str):
     if question.lower().startswith('am i ok') or question.lower().startswith('am i okay'):
         answer = ['Have no doubt. Indeed, you are very OK!']
 
-    embed = discord.Embed(title=f'🔮 8ball', description=f'{Emoji.hamiltonConfuse} You ask the question, \"**{question.capitalize()}?**\"\n\n{Emoji.hamiltonWisdom} and I answer... \"**{random.choice(answer)}**\"', color=0x55ffff)
+    embed = discord.Embed(title=f'🔮 What is it that troubles you?', description=f'{Emoji.hamiltonConfuse} You ask the question, \"**{question.capitalize()}?**\"\n\n{Emoji.hamiltonWisdom} and I answer... \"**{random.choice(answer)}**\"', color=0x55ffff)
     await ctx.send(embed=embed)
 
 @_8ball.error
