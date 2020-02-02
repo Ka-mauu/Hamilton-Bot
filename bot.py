@@ -215,4 +215,4 @@ async def _define(ctx, *, word:str):
     await ctx.send(embed=embed)
 
 
-client.run('NjcyOTM1OTgwMjM1MjI3MTM3.XjdGRw.Z4V1ppCwJ2rJMXPAdIYFUsQztF4')
+client.run('NjcyOTM1OTgwMjM1MjI3MTM3.XjdG6A.ulWXaV-4T8BdfZ5CQZjzuH6OKE8')
