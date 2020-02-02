@@ -15,10 +15,9 @@ from enum import Enum
 from discord.ext import commands
 from zalgo_text import zalgo
 
-# prefix(es)
-client = commands.Bot(command_prefix=['ok. ', 'ok.', 'ok!', 'ok! '])
+client = commands.Bot(command_prefix=['ok. ', 'ok.', 'ok!', 'ok! '])  # prefix(es)
 
-# config
+# config start
 
 config = ConfigParser()
 config.read('data.ini')
@@ -26,8 +25,7 @@ config.read('data.ini')
 instance = config.getint('main', 'instance')
 status = config.get('main', 'status')
 
-# increase instance integer by 1 on launch
-instance += 1
+instance += 1  # increase instance integer by 1 on launch
 
 config.set('main', 'instance', str(instance))
 
@@ -41,10 +39,8 @@ write()
 
 # config end
 
-# for easy access
 
-
-class Emoji():
+class Emoji():  # for easy access
     hamiltonConfuse = '<:okHamiltonConfuse:630553287145422871>'
     hamiltonWoke = '<:okHamiltonWoke:630553285488803850>'
     hamiltonDread = '<:okHamiltonDread:630553286986039356>'
