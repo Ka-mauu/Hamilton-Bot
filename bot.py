@@ -90,7 +90,7 @@ async def _ping(ctx):
 async def _restart(ctx):
     # ghetto restart, can probably improve this
     await ctx.send(f'Restarting...')
-    os.startfile('C:\\Users\\WT\\Downloads\\misc\\programming\\projects\\_DiscordHamiltonBot\\bot.py')
+    os.startfile('C:\\Users\\WT\\Downloads\\misc\\programming\\projects\\_DiscordHamiltonBot\\Hamilton-Bot\\bot.py')
     sys.exit()
 
 @client.command(aliases=['stop','die','kill','quit'])
