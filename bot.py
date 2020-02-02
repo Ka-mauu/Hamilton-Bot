@@ -122,7 +122,7 @@ async def _8ball(ctx, *, question:str):
 @_8ball.error
 async def _8ball_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        r = ['Are you going to ask me a question or what?', 'What is it? I am waiting...',  'Ask me a question, dimwit.', 'That is not a proper question..']
+        r = ['Are you going to ask me a question or what?', 'What is it? I am waiting...',  'Ask me a real question, dimwit.', 'That is not a proper question...']
         await ctx.send(random.choice(r))
 
 @client.command(aliases=['zalgo', 'cursed'])
@@ -133,7 +133,7 @@ async def _zalgo(ctx, *, text:str):
 @_zalgo.error
 async def _zalgo_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        r = ['What am I going to say, nothing?', 'Give me something to say.']
+        r = ['What am I going to say? I cannot just say nothing.', 'Give me something to say. Do you have anything?']
         await ctx.send(random.choice(r))
 
 @client.command(aliases=['say', 'echo', 'speak'])
@@ -144,7 +144,7 @@ async def _say(ctx, *, text:str):
 @_say.error
 async def _say_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        r = ['What am I going to say, nothing?', 'Give me something to say.']
+        r = ['What am I going to say? I cannot just say nothing.', 'Give me something to say. Do you have anything?']
         await ctx.send(random.choice(r))
 
 @client.command(aliases=['temperature','temp'])
