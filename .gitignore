@@ -2,3 +2,5 @@
 data.ini
 *.ini
 __pycache__/eightball_responses.cpython-38.pyc
+__pycache__/bot.cpython-38.pyc
+__pycache__/errorhandling.cpython-38.pyc
