@@ -96,7 +96,7 @@ class Events():
         if isinstance(error, commands.CommandNotFound):
             r = ['That is not a proper command..', 'I cannot perform a non-existent request.', 'Are you going to give me something to do, or what?', 'I cannot just sit here idly, what do you want me to do?']
             await ctx.send(random.choice(r))
-        if isinstance(error, commands.CheckFailure):
+        elif isinstance(error, commands.CheckFailure):
             await ctx.send(':x: You do not have the permissions to perform this command!')
         else:
             print(f'Something went wrong. Error: \n{error, type(error)}\nTime of error: {datetime.datetime.now()}')
