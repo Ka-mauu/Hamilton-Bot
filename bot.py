@@ -50,6 +50,34 @@ class Emoji():  # for easy access
     hamiltonGem = '<:okHamiltonGem:669100365311901698>'
 
 
+class Methods():
+
+    async def searchUrban(self, ctx, *, word: str):
+        # get the list inside of a list
+        urb = urbandict(word).get('list')
+        # make it a string so we can modify it
+        tostring = json.dumps(urb)
+        if tostring == '[]':
+            await ctx.send(f':x: There is no urban dictionary definition for **{word}**.')
+            return
+        if tostring.endswith(']'):
+            tostring = tostring[1:-1]  # cut off the square brackets so it's readable as a list
+        # give us the first result
+        sep = ', {'
+        rest = tostring.split(sep, 1)[0]
+        # back in to a list
+        u = json.loads(rest)
+        word = u['word']
+        author = u['author']
+        definition = u['definition'].replace("[", "").replace("]", "")
+        example = u['example'].replace("[", "").replace("]", "")
+
+        embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
+        embed.add_field(name=f'Example', value=f'{example}', inline=False)
+        embed.add_field(name=f'Author', value=f'{author}', inline=False)
+        await ctx.send(embed=embed)
+
+
 class Events():
 
     @client.event
@@ -64,6 +92,8 @@ class Events():
         if isinstance(error, commands.CommandNotFound):
             r = ['That is not a proper command..', 'I cannot perform a non-existent request.', 'Are you going to give me something to do, or what?', 'I cannot just sit here idly, what do you want me to do?']
             await ctx.send(random.choice(r))
+        else:
+            print(error, type(error))
 
 
 class Commands():
@@ -124,30 +154,8 @@ class Commands():
 
     @client.command(aliases=['urban', 'ud', 'urbandictionary'])
     async def _urban(ctx, *, word: str):
-        # get the list inside of a list
-        urb = urbandict(word).get('list')
-        # make it a string so we can modify it
-        tostring = json.dumps(urb)
-        if tostring == '[]':
-            await ctx.send(f':x: There is no definition for **{word}**.')
-            return
-        if tostring.endswith(']'):
-            tostring = tostring[1:-1]  # cut off the square brackets so it's readable as a list
-        # give us the first result
-        sep = ', {'
-        rest = tostring.split(sep, 1)[0]
-        # back in to a list
-        u = json.loads(rest)
-        word = u['word']
-        author = u['author']
-        definition = u['definition'].replace("[", "").replace("]", "")
-        example = u['example'].replace("[", "").replace("]", "")
-
-        print(u)
-        embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
-        embed.add_field(name=f'Example', value=f'{example}', inline=False)
-        embed.add_field(name=f'Author', value=f'{author}', inline=False)
-        await ctx.send(embed=embed)
+        methods = Methods()
+        await methods.searchUrban(ctx=ctx, word=word)
 
     @client.command(aliases=['define'])
     async def _define(ctx, *, word: str):
@@ -156,6 +164,9 @@ class Commands():
         syns = wordnet.synsets(word)
         if json.dumps(syns) == '[]':
             await ctx.send(f':x: There is no definition for **{word}**.')
+            await ctx.send(f'Searching urban dictionary for a definition...')
+            methods = Methods()
+            await methods.searchUrban(ctx=ctx, word=word)
             return
         definition = syns[0].definition()
         examplesList = syns[0].examples()
