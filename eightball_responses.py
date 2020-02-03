@@ -16,7 +16,7 @@ def responses(question: str):
 
     if q.startswith('am'):
 
-        answer = ['Ok, you definitely show the symptoms, so yes.', 'Ok. you do not show the symptoms, fortunately.', 'Ok, the universe has decided so.',
+        answer = ['Ok, you definitely show the symptoms, so yes.', 'Ok, you do not show the symptoms, fortunately.', 'Ok, the universe has decided so.',
                   'Ok... Rest assured, because you are not.', 'Ok... Rest assured, because you are.', 'Ok... Regardless of what you feel you are, just know that you are loved.', 'Ok, I raise you a better question... Are you stupid?']
 
     if q.startswith('is') or q.startswith('does') or q.startswith('do i') or q.startswith('do we') or q.startswith('did') or q.startswith('have'):

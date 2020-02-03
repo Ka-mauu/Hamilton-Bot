@@ -15,10 +15,10 @@ from configparser import ConfigParser
 from enum import Enum
 from discord.ext import commands
 from zalgo_text import zalgo
+from pathlib import Path
 
 # prefixes
 client = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'Ok! ', 'oK! ', 'OK! ', 'ok.', 'Ok.', 'oK.', 'OK.', 'ok!', 'Ok!', 'oK!', 'OK!'])
-
 
 # config start
 
@@ -128,10 +128,8 @@ class Commands():
     @client.command(aliases=['restart'])
     @commands.check(Methods.chkLerrific)
     async def _restart(ctx):
-        # ghetto restart, can probably improve this
         await ctx.send(f'I will come back...')
-        os.startfile('C:\\Users\\WT\\Downloads\\misc\\programming\\projects\\_DiscordHamiltonBot\\Hamilton-Bot\\bot.py')
-        sys.exit()
+        os.execl(sys.executable, sys.executable, * sys.argv)
 
     @client.command(aliases=['stop', 'die', 'kill', 'quit'])
     @commands.check(Methods.chkLerrific)
@@ -242,5 +240,5 @@ class Errors():
             await ctx.send(f':x: {random.choice(r)}')
 
 
-token = open('C:\\Users\\WT\\Downloads\\misc\\programming\\projects\\_DiscordHamiltonBot\\token.txt', 'r+').read()
+token = open(Path("../token.txt")).read()
 client.run(token)
