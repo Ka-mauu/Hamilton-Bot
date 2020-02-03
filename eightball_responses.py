@@ -17,9 +17,9 @@ def responses(question: str):
         answer = ['Ok, I have no opinion on any of your trivial questions. Next!', 'Ok, you definitely show the symptoms, so yes.', 'Ok. you do not show the symptoms, fortunately.', 'Ok, the universe has decided so.',
                   'Ok... Rest assured, because you are not.', 'Ok... Rest assured, because you are.', 'Ok... Regardless of what you feel you are, just know that you are loved.', 'Ok, I raise you a better question... Are you stupid?']
 
-    if question.lower().startswith('is') or question.lower().startswith('does') or question.lower().startswith('do i') or question.lower().startswith('do we'):
+    if question.lower().startswith('is') or question.lower().startswith('does') or question.lower().startswith('do i') or question.lower().startswith('do we') or question.lower().startswith('did it'):
 
-        answer = ['Ok, I have no opinion on any of your trivial questions. Next!', 'Ok, I can say yes without a doubt.', 'Ok, I can say no without a doubt.', 'Ok... Well, no, unfortunately.', 'Ok... Well, yes, unfortunately.', 'Ok, I raise you a better question... Are you stupid?', 'Ok, the universe has decided so.']
+        answer = ['Ok, I have no opinion on any of your trivial questions. Next!', 'Ok, I can say yes without a doubt.', 'Ok, I can say no without a doubt.', 'Ok... Well, no, unfortunately.', 'Ok... Well, yes, unfortunately.', 'Ok, I raise you a better question... Are you stupid?', 'Ok, the universe has decided so.', 'Ok, I say this with the utmost certainty... Yes.', 'Ok, I say this with the utmost certainty... No.']
 
     if question.lower().startswith('if') or question.lower().startswith('will') or question.lower().startswith('would') or question.lower().startswith('could') or question.lower().startswith('shall'):
 
