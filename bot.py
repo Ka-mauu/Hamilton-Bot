@@ -17,7 +17,7 @@ from discord.ext import commands
 from zalgo_text import zalgo
 from pathlib import Path
 
-# prefixes
+# prefixes !! for some reason the prefixes with spaces have to be first in the list.. /shrug
 client = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'Ok! ', 'oK! ', 'OK! ', 'ok.', 'Ok.', 'oK.', 'OK.', 'ok!', 'Ok!', 'oK!', 'OK!'])
 
 # config start
@@ -55,7 +55,7 @@ class Emoji():  # for easy access
 
 class Methods():
 
-    def chkLerrific(ctx):
+    def owner(ctx):
         return ctx.author.id == 259536485340938242
 
     async def searchUrban(self, ctx, *, word: str):
@@ -126,13 +126,13 @@ class Commands():
         await ctx.send(embed=embed)
 
     @client.command(aliases=['restart'])
-    @commands.check(Methods.chkLerrific)
+    @commands.check(Methods.owner)
     async def _restart(ctx):
         await ctx.send(f'I will come back...')
         os.execl(sys.executable, sys.executable, * sys.argv)
 
     @client.command(aliases=['stop', 'die', 'kill', 'quit'])
-    @commands.check(Methods.chkLerrific)
+    @commands.check(Methods.owner)
     async def _stop(ctx):
         await ctx.send(f'{Emoji.hamiltonEyeroll} Just for now...')
         sys.exit()
@@ -140,7 +140,6 @@ class Commands():
     @client.command(aliases=['8ball', 'eightball'])
     async def _8ball(ctx, *, question: str):
         answer = eightball_responses.responses(question)
-
         embed = discord.Embed(title=f'🔮 What is it that troubles you?', description=f'{Emoji.hamiltonConfuse} You ask the question, \"**{question.capitalize()}?**\"\n\n{Emoji.hamiltonWisdom} and I answer... \"**{random.choice(answer)}**\"', color=0x55ffff)
         await ctx.send(embed=embed)
 
@@ -160,7 +159,7 @@ class Commands():
     async def _temperature(ctx, *, temperature: float):
         CtoF = (temperature * 9 / 5) + 32
         FtoC = (temperature - 32) * 5 / 9
-        embed = discord.Embed(title=f'Temperature conversion', description=f'{temperature}°C **Celsius to Fahrenheit:** {round(CtoF,2)}°F\n\n{temperature}°F **Fahrenheit to Celsius:** {round(FtoC,2)}°C', color=0x55ffff)
+        embed = discord.Embed(title=f'Temperature conversion', description=f'**{temperature}°C** Celsius to Fahrenheit: **{round(CtoF,2)}°F\n\n{temperature}°F** Fahrenheit to Celsius: **{round(FtoC,2)}°C**', color=0x55ffff)
         await ctx.send(embed=embed)
 
     @client.command(aliases=['urban', 'ud', 'urbandictionary'])
@@ -240,5 +239,4 @@ class Errors():
             await ctx.send(f':x: {random.choice(r)}')
 
 
-token = open(Path("../token.txt")).read()
-client.run(token)
+client.run(open(Path("../token.txt")).read())
