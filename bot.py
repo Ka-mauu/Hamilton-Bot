@@ -16,7 +16,9 @@ from enum import Enum
 from discord.ext import commands
 from zalgo_text import zalgo
 
-client = commands.Bot(command_prefix=['ok. ', 'ok.', 'ok!'])  # prefix(es)
+# prefixes
+client = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'Ok! ', 'oK! ', 'OK! ', 'ok.', 'Ok.', 'oK.', 'OK.', 'ok!', 'Ok!', 'oK!', 'OK!'])
+
 
 # config start
 
