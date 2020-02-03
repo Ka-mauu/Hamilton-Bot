@@ -1,5 +1,5 @@
 
-async def responses(question: str):
+def responses(question: str):
 
     # default response
 

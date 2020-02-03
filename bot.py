@@ -15,7 +15,7 @@ from enum import Enum
 from discord.ext import commands
 from zalgo_text import zalgo
 
-client = commands.Bot(command_prefix=['ok. ', 'ok.', 'ok!', 'ok! '])  # prefix(es)
+client = commands.Bot(command_prefix=['ok. ', 'ok.', 'ok!'])  # prefix(es)
 
 # config start
 
@@ -202,7 +202,7 @@ class Errors():
     @Commands._8ball.error
     async def _8ball_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            ['Are you going to ask me a question or what?', 'What is it that you want to ask? I am waiting...',  'Ask me a question, dimwit.', 'Will you ask me a question, or no? Make up your mind.']
+            r = ['Are you going to ask me a question or what?', 'What is it that you want to ask? I am waiting...',  'Ask me a question, dimwit.', 'Will you ask me a question, or no? Make up your mind.']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._zalgo.error
