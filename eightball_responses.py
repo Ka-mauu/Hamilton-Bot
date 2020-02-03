@@ -28,11 +28,11 @@ def responses(question: str):
 
     # custom responses
 
-    if question.lower().startswith('are you ok') or question.lower().startswith('r u ok') or question.lower().startswith('are u ok') or question.lower().startswith('r you ok') or question.lower().startswith('are you okay'):
+    if question.lower().startswith('are you ok') or question.lower().startswith('r u ok') or question.lower().startswith('are u ok') or question.lower().startswith('r you ok') or question.lower().startswith('are you okay') or question.lower().startswith('r you okay') or question.lower().startswith('r u okay') or question.lower().startswith('are u okay'):
 
         answer = ['I am very OK, and so are you! Thank you for asking.']
 
-    if question.lower().startswith('am i ok') or question.lower().startswith('am i okay'):
+    if question.lower().startswith('am i ok') or question.lower().startswith('am i okay') or question.lower().startswith('is i okay'):
 
         answer = ['Have no doubt. Indeed, you are very OK!']
 
