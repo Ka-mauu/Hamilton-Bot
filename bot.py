@@ -128,8 +128,11 @@ class Commands():
         urb = urbandict(word).get('list')
         # make it a string so we can modify it
         tostring = json.dumps(urb)
+        if tostring == '[]':
+            await ctx.send(f':x: There is no definition for **{word}**.')
+            return
         if tostring.endswith(']'):
-            tostring = tostring[1:-1]
+            tostring = tostring[1:-1]  # cut off the square brackets so it's readable as a list
         # give us the first result
         sep = ', {'
         rest = tostring.split(sep, 1)[0]
@@ -140,6 +143,7 @@ class Commands():
         definition = u['definition'].replace("[", "").replace("]", "")
         example = u['example'].replace("[", "").replace("]", "")
 
+        print(u)
         embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
         embed.add_field(name=f'Example', value=f'{example}', inline=False)
         embed.add_field(name=f'Author', value=f'{author}', inline=False)
@@ -150,6 +154,9 @@ class Commands():
         # in all honesty i didn't really bother to try and understand this
         # https://pythonprogramming.net/wordnet-nltk-tutorial/
         syns = wordnet.synsets(word)
+        if json.dumps(syns) == '[]':
+            await ctx.send(f':x: There is no definition for **{word}**.')
+            return
         definition = syns[0].definition()
         examplesList = syns[0].examples()
         synonymsList = []
@@ -166,6 +173,8 @@ class Commands():
         antonyms = json.dumps(antonymsList).replace("\"", "").replace("[", "").replace("]", "").replace("_", " ")
         examples = json.dumps(examplesList).replace("\'", "").replace("[", "").replace("]", "")
 
+        await ctx.send(f'word: {word}  definition: {definition}')
+
         embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
         if examplesList:
             embed.add_field(name=f'Examples', value=f'{examples}', inline=False)
@@ -181,32 +190,32 @@ class Errors():
     @Commands._say.error
     async def _say_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['What am I going to say, nothing?', 'Give me something to say.']
-            await ctx.send(random.choice(r))
+            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.']
+            await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._status.error
     async def _status_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             r = ['Are you going to set a status or what?', 'A status cannot contain nothing, bonehead.',  'Try setting my status to something that is not nothing.', 'That is not a proper status, dolt.']
-            await ctx.send(random.choice(r))
+            await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._8ball.error
     async def _8ball_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['Are you going to ask me a question or what?', 'What is it? I am waiting...',  'Ask me a question, dimwit.', 'That is not a proper question..']
-            await ctx.send(random.choice(r))
+            ['Are you going to ask me a question or what?', 'What is it that you want to ask? I am waiting...',  'Ask me a question, dimwit.', 'Will you ask me a question, or no? Make up your mind.']
+            await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._zalgo.error
     async def _zalgo_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['What am I going to say, nothing?', 'Give me something to say.']
-            await ctx.send(random.choice(r))
+            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.']
+            await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._temperature.error
     async def _temperature_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['I cannot calculate a number that does not exist..', 'Give me something to calculate.']
-            await ctx.send(random.choice(r))
+            r = ['I cannot calculate a number that does not exist...', 'Give me something to calculate.']
+            await ctx.send(f':x: {random.choice(r)}')
 
 
 token = open('C:\\Users\\WT\\Downloads\\misc\\programming\\projects\\_DiscordHamiltonBot\\token.txt', 'r+').read()
