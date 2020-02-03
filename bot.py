@@ -8,6 +8,7 @@ import requests
 import json
 import nltk
 import eightball_responses
+import datetime
 from nltk.corpus import wordnet
 from urbandict import urbandict
 from configparser import ConfigParser
@@ -52,6 +53,9 @@ class Emoji():  # for easy access
 
 class Methods():
 
+    def chkLerrific(ctx):
+        return ctx.author.id == 259536485340938242
+
     async def searchUrban(self, ctx, *, word: str):
         # get the list inside of a list
         urb = urbandict(word).get('list')
@@ -92,8 +96,10 @@ class Events():
         if isinstance(error, commands.CommandNotFound):
             r = ['That is not a proper command..', 'I cannot perform a non-existent request.', 'Are you going to give me something to do, or what?', 'I cannot just sit here idly, what do you want me to do?']
             await ctx.send(random.choice(r))
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send(':x: You do not have the permissions to perform this command!')
         else:
-            print(error, type(error))
+            print(f'Something went wrong. Error: \n{error, type(error)}\nTime of error: {datetime.datetime.now()}')
 
 
 class Commands():
@@ -105,6 +111,7 @@ class Commands():
         await ctx.send(embed=embed)
 
     @client.command(aliases=['status'])
+    @commands.has_role(584267156385169419)
     async def _status(ctx, *, status: str):
         config.set('main', 'status', str(status))
         write()
@@ -117,6 +124,7 @@ class Commands():
         await ctx.send(embed=embed)
 
     @client.command(aliases=['restart'])
+    @commands.check(Methods.chkLerrific)
     async def _restart(ctx):
         # ghetto restart, can probably improve this
         await ctx.send(f'I will come back...')
@@ -124,6 +132,7 @@ class Commands():
         sys.exit()
 
     @client.command(aliases=['stop', 'die', 'kill', 'quit'])
+    @commands.check(Methods.chkLerrific)
     async def _stop(ctx):
         await ctx.send(f'{Emoji.hamiltonEyeroll} Just for now...')
         sys.exit()
@@ -136,11 +145,13 @@ class Commands():
         await ctx.send(embed=embed)
 
     @client.command(aliases=['zalgo', 'cursed'])
+    @commands.has_role(584267156385169419)
     async def _zalgo(ctx, *, text: str):
         await ctx.send(zalgo.zalgo().zalgofy(text))
         await ctx.message.delete()
 
     @client.command(aliases=['say', 'echo', 'speak'])
+    @commands.has_role(584267156385169419)
     async def _say(ctx, *, text: str):
         await ctx.send(text)
         await ctx.message.delete()
