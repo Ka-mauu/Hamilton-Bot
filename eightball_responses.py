@@ -4,7 +4,8 @@ def responses(question: str):
 
     # default response
 
-    answer = ['Ok, please ask me a real question. I will not be answering otherwise.', 'Ok, do not waste my precious time with your gibberish.', 'Ok, you are absolutely unfunny.', 'Ok, I am a bit iffy on these types of questions. I will therefore not be answering them.']
+    answer = ['Ok, please ask me a real question. I will not be answering otherwise.', 'Ok, do not waste my precious time with your gibberish.', 'Ok, you are absolutely unfunny.',
+              'Ok, I am a bit iffy on these types of questions. I will therefore not be answering them.', 'Ok, I do not have time to answer these frivolous questions.', 'Ok, that is a meaningless question.', 'Ok, do not bother me with these types of questions.']
 
     # responses
 
@@ -18,9 +19,10 @@ def responses(question: str):
         answer = ['Ok, you definitely show the symptoms, so yes.', 'Ok. you do not show the symptoms, fortunately.', 'Ok, the universe has decided so.',
                   'Ok... Rest assured, because you are not.', 'Ok... Rest assured, because you are.', 'Ok... Regardless of what you feel you are, just know that you are loved.', 'Ok, I raise you a better question... Are you stupid?']
 
-    if q.startswith('is') or q.startswith('does') or q.startswith('do i') or q.startswith('do we') or q.startswith('did'):
+    if q.startswith('is') or q.startswith('does') or q.startswith('do i') or q.startswith('do we') or q.startswith('did') or q.startswith('have i') or q.startswith('have you'):
 
-        answer = ['Ok, I can say yes without a doubt.', 'Ok, I can say no without a doubt.', 'Ok... Well, no, unfortunately.', 'Ok... Well, yes, unfortunately.', 'Ok, I raise you a better question... Are you stupid?', 'Ok, the universe has decided so.', 'Ok, I say this with utmost certainty... Yes.', 'Ok, I say this with utmost certainty... No.']
+        answer = ['Ok, I can say yes without a doubt.', 'Ok, I can say no without a doubt.', 'Ok... Well, no, unfortunately.', 'Ok... Well, yes, unfortunately.', 'Ok, I raise you a better question... Are you stupid?',
+                  'Ok, the universe has decided so.', 'Ok, I say this with utmost certainty... Yes.', 'Ok, I say this with utmost certainty... No.', 'Ok, I do not think so.', 'Ok, I do believe so.']
 
     if q.startswith('if') or q.startswith('will') or q.startswith('would') or q.startswith('could') or q.startswith('shall'):
 
