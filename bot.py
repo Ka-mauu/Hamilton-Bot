@@ -181,7 +181,7 @@ class Errors():
     @Commands._say.error
     async def _say_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['What am I going to say, nothing?', 'Give me something to say.']
+            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.']
             await ctx.send(random.choice(r))
 
     @Commands._status.error
@@ -193,19 +193,19 @@ class Errors():
     @Commands._8ball.error
     async def _8ball_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['Are you going to ask me a question or what?', 'What is it? I am waiting...',  'Ask me a question, dimwit.', 'That is not a proper question..']
+            r = ['Are you going to ask me a question or what?', 'What is it that you want to ask? I am waiting...',  'Ask me a question, dimwit.', 'Will you ask me a question, or no? Make up your mind.']
             await ctx.send(random.choice(r))
 
     @Commands._zalgo.error
     async def _zalgo_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['What am I going to say, nothing?', 'Give me something to say.']
+            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.']
             await ctx.send(random.choice(r))
 
     @Commands._temperature.error
     async def _temperature_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['I cannot calculate a number that does not exist..', 'Give me something to calculate.']
+            r = ['I cannot calculate a number that does not exist...', 'Give me something to calculate.']
             await ctx.send(random.choice(r))
 
 
