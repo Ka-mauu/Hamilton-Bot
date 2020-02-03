@@ -160,7 +160,7 @@ class Commands():
     async def _temperature(ctx, *, temperature: float):
         CtoF = (temperature * 9 / 5) + 32
         FtoC = (temperature - 32) * 5 / 9
-        embed = discord.Embed(title=f'Temperature conversion', description=f'**Celsius to Fahrenheit:** {round(CtoF,2)}°F\n\n**Fahrenheit to Celsius:** {round(FtoC,2)}°C', color=0x55ffff)
+        embed = discord.Embed(title=f'Temperature conversion', description=f'{temperature}°C **Celsius to Fahrenheit:** {round(CtoF,2)}°F\n\n{temperature}°F **Fahrenheit to Celsius:** {round(FtoC,2)}°C', color=0x55ffff)
         await ctx.send(embed=embed)
 
     @client.command(aliases=['urban', 'ud', 'urbandictionary'])
