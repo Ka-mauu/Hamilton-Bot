@@ -1,5 +1,4 @@
 git+https://github.com/Rapptz/discord.py
-zalgo-text
+zalgo_text
 psutil
-urbandict
 requests
