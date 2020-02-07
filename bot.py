@@ -7,7 +7,7 @@ import requests
 import json
 import eightball_responses
 import datetime
-from nltk.corpus import wordnet
+#from nltk.corpus import wordnet
 from urbandict import urbandict
 from configparser import ConfigParser
 from discord.ext import commands
@@ -164,43 +164,6 @@ class Commands():
         methods = Methods()
         await methods.searchUrban(ctx=ctx, word=word)
 
-    @client.command(aliases=['define'])
-    async def _define(ctx, *, word: str):
-        # in all honesty i didn't really bother to try and understand this
-        # https://pythonprogramming.net/wordnet-nltk-tutorial/
-        syns = wordnet.synsets(word)
-        if json.dumps(syns) == '[]':
-            await ctx.send(f':x: There is no definition for **{word}**.')
-            await ctx.send(f'Searching urban dictionary for a definition...')
-            methods = Methods()
-            await methods.searchUrban(ctx=ctx, word=word)
-            return
-        definition = syns[0].definition()
-        examplesList = syns[0].examples()
-        synonymsList = []
-        antonymsList = []
-
-        for syn in wordnet.synsets(word):
-            for l in syn.lemmas():
-                synonymsList.append(l.name())
-                synonymsList = list(dict.fromkeys(synonymsList))
-                if l.antonyms():
-                    antonymsList.append(l.antonyms()[0].name())
-
-        synonyms = json.dumps(synonymsList).replace("\"", "").replace("[", "").replace("]", "").replace("_", " ")
-        antonyms = json.dumps(antonymsList).replace("\"", "").replace("[", "").replace("]", "").replace("_", " ")
-        examples = json.dumps(examplesList).replace("\'", "").replace("[", "").replace("]", "")
-
-        await ctx.send(f'word: {word}  definition: {definition}')
-
-        embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
-        if examplesList:
-            embed.add_field(name=f'Examples', value=f'{examples}', inline=False)
-        if synonymsList:
-            embed.add_field(name=f'Synonyms', value=f'{synonyms}', inline=False)
-        if antonymsList:
-            embed.add_field(name=f'Antonyms', value=f'{antonyms}', inline=False)
-        await ctx.send(embed=embed)
 
 
 class Errors():
