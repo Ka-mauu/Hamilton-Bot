@@ -1,4 +1,4 @@
-git+https://github.com/Rapptz/discord.py
-zalgo_text
+discord.py
+zalgo-text
 psutil
 requests
