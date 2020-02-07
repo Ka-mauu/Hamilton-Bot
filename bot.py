@@ -7,7 +7,6 @@ import requests
 import json
 import eightball_responses
 import datetime
-#from nltk.corpus import wordnet
 from urbandict import urbandict
 from configparser import ConfigParser
 from discord.ext import commands
