@@ -3,21 +3,18 @@ import random
 import sys
 import os
 import psutil
-import pprint
 import requests
 import json
-import nltk
 import eightball_responses
 import datetime
 from nltk.corpus import wordnet
 from urbandict import urbandict
 from configparser import ConfigParser
-from enum import Enum
 from discord.ext import commands
 from zalgo_text import zalgo
 from pathlib import Path
 
-# prefixes !! for some reason the prefixes with spaces have to be first in the list.. /shrug
+# prefixes - for some reason the prefixes with spaces have to be first in the list.. /shrug
 client = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'Ok! ', 'oK! ', 'OK! ', 'ok.', 'Ok.', 'oK.', 'OK.', 'ok!', 'Ok!', 'oK!', 'OK!'])
 
 # config start
