@@ -12,10 +12,30 @@ from urbandict import urbandict
 from discord.ext import commands
 from zalgo_text import zalgo
 from pathlib import Path
-from config import Config
+from configparser import ConfigParser
+
 
 # prefixes - for some reason the prefixes with spaces have to be first in the list.. /shrug
 client = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'Ok! ', 'oK! ', 'OK! ', 'ok.', 'Ok.', 'oK.', 'OK.', 'ok!', 'Ok!', 'oK!', 'OK!'])
+
+
+class Config():
+
+    config = ConfigParser()
+    config.read('data.ini')
+
+    instance = config.getint('main', 'instance')
+    status = config.get('main', 'status')
+
+    instance += 1  # increase instance integer by 1 on launch
+
+    config.set('main', 'instance', str(instance))
+
+    def write():
+        with open('data.ini', 'w+') as configfile:
+            config.write(configfile)
+
+    write()
 
 
 class Emoji():  # for easy access
@@ -217,5 +237,3 @@ class Errors():
 
 
 client.run(open(Path("../token.txt")).read())
-
-input()
