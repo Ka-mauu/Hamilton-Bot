@@ -9,35 +9,13 @@ import eightball_responses
 import datetime
 from nltk.corpus import wordnet
 from urbandict import urbandict
-from configparser import ConfigParser
 from discord.ext import commands
 from zalgo_text import zalgo
 from pathlib import Path
+from config import Config
 
 # prefixes - for some reason the prefixes with spaces have to be first in the list.. /shrug
 client = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'Ok! ', 'oK! ', 'OK! ', 'ok.', 'Ok.', 'oK.', 'OK.', 'ok!', 'Ok!', 'oK!', 'OK!'])
-
-# config start
-
-config = ConfigParser()
-config.read('data.ini')
-
-instance = config.getint('main', 'instance')
-status = config.get('main', 'status')
-
-instance += 1  # increase instance integer by 1 on launch
-
-config.set('main', 'instance', str(instance))
-
-
-def write():
-    with open('data.ini', 'w+') as configfile:
-        config.write(configfile)
-
-
-write()
-
-# config end
 
 
 class Emoji():  # for easy access
@@ -56,6 +34,8 @@ class Methods():
         return ctx.author.id == 259536485340938242
 
     async def searchUrban(self, ctx, *, word: str):
+        # this is why you dont code late at night - fix later...
+
         # get the list inside of a list
         urb = urbandict(word).get('list')
         # make it a string so we can modify it
@@ -76,8 +56,8 @@ class Methods():
         example = u['example'].replace("[", "").replace("]", "")
 
         embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
-        embed.add_field(name=f'Example', value=f'{example}', inline=False)
-        embed.add_field(name=f'Author', value=f'{author}', inline=False)
+        embed.add_field(name=f'Example', value=f'{example}', inline=True)
+        embed.add_field(name=f'Author', value=f'{author}', inline=True)
         await ctx.send(embed=embed)
 
 
@@ -87,7 +67,7 @@ class Events():
     async def on_ready():
         print('Hello!')
         # update status
-        await client.change_presence(status=discord.Status.online, activity=discord.Game(status))
+        await client.change_presence(status=discord.Status.online, activity=discord.Game(Config.status))
         await client.get_channel(672942729864413184).send(f'<:okHamiltonOwO:630553287111737354> I have awakened! Serve me and I shall return the favour.')
 
     @client.event
@@ -112,7 +92,7 @@ class Commands():
     @client.command(aliases=['status'])
     @commands.has_role(584267156385169419)
     async def _status(ctx, *, status: str):
-        config.set('main', 'status', str(status))
+        Config.config.set('main', 'status', str(status))
         write()
         await client.change_presence(status=discord.Status.online, activity=discord.Game(status))
         await ctx.send(f'Status set to **{status}**')
@@ -237,3 +217,5 @@ class Errors():
 
 
 client.run(open(Path("../token.txt")).read())
+
+input()
