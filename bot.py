@@ -60,6 +60,7 @@ class Emoji():  # for easy access
     hamiltonCool = '<:okHamiltonCool:635747888672145408>'
     heads = '<:okHeads:676292505427247104>'
     tails = '<:okTails:676292506832601099>'
+    wisp = '<:okWilloWisp:676253396545568770>'
 
 
 class Methods():
@@ -92,7 +93,7 @@ class Methods():
         definition = u['definition'].replace("[", "").replace("]", "")
         example = u['example'].replace("[", "").replace("]", "")
 
-        embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
+        embed = discord.Embed(title=f'{word}', description=f'{definition}', color=color)
         embed.add_field(name=f'Example', value=f'{example}', inline=True)
         embed.add_field(name=f'Author', value=f'{author}', inline=True)
         await ctx.send(embed=embed)
@@ -195,7 +196,6 @@ class Commands():
         if json.dumps(syns) == '[]':
             await ctx.send(f':x: There is no definition for **{word}**.')
             await ctx.send(f'Searching urban dictionary for a definition...')
-            methods = Methods()
             await methods.searchUrban(ctx=ctx, word=word)
             return
         definition = syns[0].definition()
@@ -216,7 +216,7 @@ class Commands():
 
         await ctx.send(f'word: {word}  definition: {definition}')
 
-        embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
+        embed = discord.Embed(title=f'{word}', description=f'{definition}', color=color)
         if examplesList:
             embed.add_field(name=f'Examples', value=f'{examples}', inline=False)
         if synonymsList:
@@ -228,6 +228,13 @@ class Commands():
 
 class Points():
 
+    async def checkForPoints(ctx):
+        if not (config.has_option('points', f'{ctx.message.author.id}.bal')):
+            await ctx.send(f':x: You do not have any wisps! Register yourself with `ok.wisps`')
+            return False
+        else:
+            return True
+
     @client.command(aliases=['points', 'balance', 'bal', 'wisps'])
     async def _points(ctx):
         read()
@@ -238,7 +245,7 @@ class Points():
 
         points = config.getint('points', f'{ctx.message.author.id}.bal')
 
-        await methods.embed(ctx, f'Deposit', f'**{ctx.message.author.name}** has accumulated **{points}** will-o-wisps.')
+        await methods.embed(ctx, f'{Emoji.wisp} Deposit', f'**{ctx.message.author.name}** has accumulated **{points}** will-o-wisps.')
         """img = Image.open('resources\\points_balance.png')
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype('resources\\UASQUARE.TTF', 30)
@@ -246,59 +253,58 @@ class Points():
         img.save('resources\\points_balance_r.png')
         await ctx.send(file=discord.File('resources\\points_balance_r.png'))"""
 
-    @client.command(aliases=['coinflip'])
+    @client.command(aliases=['coinflip', 'cointoss'])
     async def _coinflip(ctx, bet: int, coin: str):
         read()
 
-        if not (config.has_option('points', f'{ctx.message.author.id}.bal')):
-            await ctx.send(f':x: You do not have any wisps! Register yourself with `ok.wisps`')
+        if not await Points.checkForPoints(ctx):
             return
-        else:
-            points = config.getint('points', f'{ctx.message.author.id}.bal')
+
+        points = config.getint('points', f'{ctx.message.author.id}.bal')
 
         if(bet > points):
             await ctx.send(f':x: You cannot bet more wisps than you own! You have {points} wisps.')
             return
 
-        hamiltonBet = random.randrange(bet, bet * 2)
+        hamiltonBet = random.randrange(bet, bet * 1.5)
 
         def check(m):
             return m.content.lower() == 'ok'
 
-        await methods.embed(ctx, 'Are you sure you want to do this?', f'Do you want to sacrifice **{bet}** will-o-wisps for a chance of a greater blessing? Or worse, a chance to lose it?\n\nType **OK** to continue...')
+        await methods.embed(ctx, 'Are you sure you want to do this?', f'Do you wish to sacrifice **{bet}** will-o-wisps for a chance of a greater blessing? Or worse, a chance to lose it?\n\nType **OK** to continue...')
         try:
-            confirm = await client.wait_for('message', check=check, timeout=10)
+            confirm = await client.wait_for('message', check=check, timeout=7)
         except asyncio.TimeoutError:
             await ctx.send(':x: You did not respond in time, cancelling coin flip.')
             return
 
         if(coin.lower() == 'heads'):
-            response = f'You bet **{bet}** on {Emoji.heads} heads. I bet **{hamiltonBet}** on {Emoji.tails} tails!'
+            response = f'You bet **{bet}** on heads {Emoji.heads}. I bet **{hamiltonBet}** on tails! {Emoji.tails}'
         elif(coin.lower() == 'tails'):
-            response = f'You bet **{bet}** on {Emoji.tails} tails. I bet **{hamiltonBet}** on {Emoji.heads} heads!'
+            response = f'You bet **{bet}** on tails {Emoji.tails}. I bet **{hamiltonBet}** on heads! {Emoji.heads}'
         else:
-            await ctx.send('That is not a side of a coin, moron...')
+            await ctx.send(':x: That is not a side of a coin, moron... Choose heads or tails.')
             return
 
         await methods.embed(ctx, title=f'Coinflip', description=response)
-        await asyncio.sleep(1.5)
-        await ctx.send(embed=discord.Embed(title='Flipping...', color=0x55ffff))
-        await asyncio.sleep(3)
+        await asyncio.sleep(1)
+        await ctx.send(embed=discord.Embed(title='Flipping...', color=color))
+        await asyncio.sleep(2)
         result = random.choice(['heads', 'tails'])
         if(result == 'heads' and coin.lower() == 'heads'):
-            response2 = f'The coin landed on {Emoji.heads} heads, you win... {Emoji.hamiltonDread}\n**+ {hamiltonBet}** wisps was added to your account.'
+            response2 = f'The coin landed on heads {Emoji.heads}, you win... {Emoji.hamiltonDread}\n**+ {hamiltonBet}** wisps was added to your account.'
             points += hamiltonBet + bet
             points -= bet
         elif(result == 'heads' and coin.lower() == 'tails'):
-            response2 = f'The coin landed on {Emoji.heads} heads, I win! {Emoji.hamiltonCool}\n**- {hamiltonBet + bet}** wisps was taken from your account.'
+            response2 = f'The coin landed on heads {Emoji.heads}, I win! {Emoji.hamiltonCool}\n**- {hamiltonBet + bet}** wisps was taken from your account.'
             points -= hamiltonBet + bet
             points += bet
         elif(result == 'tails' and coin.lower() == 'tails'):
-            response2 = f'The coin landed on {Emoji.tails} tails, you win... {Emoji.hamiltonDread}\n**+ {hamiltonBet}** wisps was added to your account.'
+            response2 = f'The coin landed on tails {Emoji.tails}, you win... {Emoji.hamiltonDread}\n**+ {hamiltonBet}** wisps was added to your account.'
             points += hamiltonBet + bet
             points -= bet
         elif(result == 'tails' and coin.lower() == 'heads'):
-            response2 = f'The coin landed on {Emoji.tails} tails, I win! {Emoji.hamiltonCool}\n**- {hamiltonBet + bet}** wisps was taken from your account.'
+            response2 = f'The coin landed on tails {Emoji.tails}, I win! {Emoji.hamiltonCool}\n**- {hamiltonBet + bet}** wisps was taken from your account.'
             points -= hamiltonBet + bet
             points += bet
 
@@ -306,6 +312,21 @@ class Points():
 
         config.set('points', f'{ctx.message.author.id}.bal', str(points))
         write()
+
+    @client.command(aliases=['odds', 'chance'])
+    async def _odds(ctx, bet: int, chance: int):
+        read()
+
+        if not await Points.checkForPoints(ctx):
+            return
+
+        points = config.getint('points', f'{ctx.message.author.id}.bal')
+
+        if(bet > points):
+            await ctx.send(f':x: You cannot bet more wisps than you own! You have {points} wisps.')
+            return
+
+        await ctx.send('e')
 
 
 class Errors():
