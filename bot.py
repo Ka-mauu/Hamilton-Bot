@@ -55,6 +55,7 @@ class Emoji():  # for easy access
     hamiltonEyeroll = '<:okHamiltonEyeroll:630553283890642974>'
     hamiltonWisdom = '<:okHamiltonWisdom:636473613238665227>'
     hamiltonGem = '<:okHamiltonGem:669100365311901698>'
+    hamiltonCool = '<:okHamiltonCool:635747888672145408>'
     heads = '<:okHeads:676292505427247104>'
     tails = '<:okTails:676292506832601099>'
 
@@ -263,42 +264,47 @@ class Points():
         def check(m):
             return m.content.lower() == 'ok'
 
-        await ctx.send(f'Do you want to sacrifice **{bet}** will-o-wisps for a chance of a greater blessing? Or worse, a chance to lose it?\nType **OK** to continue...')
+        embed0 = discord.Embed(title='Are you sure you want to do this?', description=f'Do you want to sacrifice **{bet}** will-o-wisps for a chance of a greater blessing? Or worse, a chance to lose it?\n\nType **OK** to continue...', color=0x55ffff)
+        await ctx.send(embed=embed0)
         try:
-            confirm = await client.wait_for('message', check=check, timeout=5)
+            confirm = await client.wait_for('message', check=check, timeout=10)
         except asyncio.TimeoutError:
             await ctx.send('You did not respond in time, cancelling coin flip.')
             return
 
         if(coin.lower() == 'heads'):
-            response = f'You bet **{bet}** on heads. I bet **{hamiltonBet}** on tails!'
+            response = f'You bet **{bet}** on {Emoji.heads} heads. I bet **{hamiltonBet}** on {Emoji.tails} tails!'
         elif(coin.lower() == 'tails'):
-            response = f'You bet **{bet}** on tails. I bet **{hamiltonBet}** on heads!'
+            response = f'You bet **{bet}** on {Emoji.tails} tails. I bet **{hamiltonBet}** on {Emoji.heads} heads!'
         else:
             await ctx.send('That is not a side of a coin, moron...')
             return
 
-        await ctx.send(response)
-        await asyncio.sleep(0.5)
-        await ctx.send('Flipping...')
-        await asyncio.sleep(1.25)
+        embed1 = discord.Embed(title=f'Coinflip', description=response, color=0x55ffff)
+        await ctx.send(embed=embed1)
+        await asyncio.sleep(1)
+        await ctx.send('***Flipping...***')
+        await asyncio.sleep(2)
         result = random.choice(['heads', 'tails'])
         if(result == 'heads' and coin.lower() == 'heads'):
-            await ctx.send(f'The coin landed on heads, you win...\n**+ {hamiltonBet}** wisps was added to your account.')
+            response2 = f'The coin landed on {Emoji.heads} heads, you win... {Emoji.hamiltonDread}\n**+ {hamiltonBet}** wisps was added to your account.'
             points += hamiltonBet + bet
             points -= bet
         elif(result == 'heads' and coin.lower() == 'tails'):
-            await ctx.send(f'The coin landed on heads, I win!\n**- {hamiltonBet + bet}** wisps was taken from your account.')
+            response2 = f'The coin landed on {Emoji.heads} heads, I win! {Emoji.hamiltonCool}\n**- {hamiltonBet + bet}** wisps was taken from your account.'
             points -= hamiltonBet + bet
             points += bet
         elif(result == 'tails' and coin.lower() == 'tails'):
-            await ctx.send(f'The coin landed on tails, you win...\n**+ {hamiltonBet}** wisps was added to your account.')
+            response2 = f'The coin landed on {Emoji.tails} tails, you win... {Emoji.hamiltonDread}\n**+ {hamiltonBet}** wisps was added to your account.'
             points += hamiltonBet + bet
             points -= bet
         elif(result == 'tails' and coin.lower() == 'heads'):
-            await ctx.send(f'The coin landed on tails, I win!\n**- {hamiltonBet + bet}** wisps was taken from your account.')
+            response2 = f'The coin landed on {Emoji.tails} tails, I win! {Emoji.hamiltonCool}\n**- {hamiltonBet + bet}** wisps was taken from your account.'
             points -= hamiltonBet + bet
             points += bet
+
+        embed2 = discord.Embed(title=f'Coinflip Result', description=response2, color=0x55ffff)
+        await ctx.send(embed=embed2)
 
         config.set('points', f'{ctx.message.author.id}.bal', str(points))
         write()

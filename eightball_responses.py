@@ -39,4 +39,8 @@ def responses(question: str):
 
         answer = ['Have no doubt. Indeed, you are very OK!']
 
+    if q.startswith('heads or tails'):
+
+        answer = ['Heads.', 'Tails.']
+
     return answer
