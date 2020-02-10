@@ -23,6 +23,8 @@ client = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'O
 
 synonymsStupid = ['stupid', 'dense', 'thick', 'simple', 'dull', 'blockheaded', 'numskulled']
 
+color = 0x55ffff
+
 config = ConfigParser()
 datafile = 'data.ini'
 config.read(datafile)
@@ -65,6 +67,9 @@ class Methods():
     def owner(ctx):
         return ctx.author.id == 259536485340938242
 
+    async def embed(self, ctx, title: str, description: str):
+        await ctx.send(embed=discord.Embed(title=title, description=description, color=color))
+
     async def searchUrban(self, ctx, *, word: str):
         # this is why you dont code late at night - fix later...
 
@@ -91,6 +96,9 @@ class Methods():
         embed.add_field(name=f'Example', value=f'{example}', inline=True)
         embed.add_field(name=f'Author', value=f'{author}', inline=True)
         await ctx.send(embed=embed)
+
+
+methods = Methods()
 
 
 class Events():
@@ -126,9 +134,7 @@ class Commands():
 
     @client.command(aliases=['info'])
     async def _info(ctx):
-        embed = discord.Embed(title=f'{Emoji.hamiltonGem} Info',
-                              description=f'*You want me to tell you about myself? Well of course. I am Hamilton, your almighty god. Any questions? No? OK.*\n\n**Status:** What the hell are you saying? I am up and running. Perfectly healthy... What about you? You are nothing but a frail clump of mortal flesh. The only way to completely redeem your pathetic existence is to serve me!\n\n**How much cheese I own:** In my home dimension, I have cut all cheese trade throughout the entire universe, practically making the mice population there extinct. I own only {random.randrange(1337)} cheese wheels in this realm though.\n\n**Favorite number:** It is eight.\n\n**Favorite colour:** Do you really have to ask? What do you think, ORANGE? It\'s baby blue obviously.\n\n**My colour palette (in hex):** [123456 - Fur / Pupils] [55ffff - Gem] [fad420 - Eyes] [ff55aa - Mouth]\n\n**Owner:** I belong to no one. Although I have a particular affinity for lerrific#6574.\n\n**Bot creation date:** 10:00 AM 01-Feb-20\n\n**Total system CPU usage:** {psutil.cpu_percent()}%\n\n**Total system memory usage:** {dict(psutil.virtual_memory()._asdict()).get("percent")}%\n\n**Bot instance:** {instance}', color=0x55ffff)
-        await ctx.send(embed=embed)
+        await methods.embed(ctx, f'{Emoji.hamiltonGem} Info', f'*You want me to tell you about myself? Well of course. I am Hamilton, your almighty god. Any questions? No? OK.*\n\n**Status:** What the hell are you saying? I am up and running. Perfectly healthy... What about you? You are nothing but a frail clump of mortal flesh. The only way to completely redeem your pathetic existence is to serve me!\n\n**How much cheese I own:** In my home dimension, I have cut all cheese trade throughout the entire universe, practically making the mice population there extinct. I own only {random.randrange(1337)} cheese wheels in this realm though.\n\n**Favorite number:** It is eight.\n\n**Favorite colour:** Do you really have to ask? What do you think, ORANGE? It\'s baby blue obviously.\n\n**My colour palette (in hex):** [123456 - Fur / Pupils] [55ffff - Gem] [fad420 - Eyes] [ff55aa - Mouth]\n\n**Owner:** I belong to no one. Although I have a particular affinity for lerrific#6574.\n\n**Bot creation date:** 10:00 AM 01-Feb-20\n\n**Total system CPU usage:** {psutil.cpu_percent()}%\n\n**Total system memory usage:** {dict(psutil.virtual_memory()._asdict()).get("percent")}%\n\n**Bot instance:** {instance}')
 
     @client.command(aliases=['status'])
     @commands.has_role(584267156385169419)
@@ -140,8 +146,7 @@ class Commands():
 
     @client.command(aliases=['ping'])
     async def _ping(ctx):
-        embed = discord.Embed(title=f'Latency', description=f'{round(client.latency * 1000)}ms', color=0x55ffff)
-        await ctx.send(embed=embed)
+        await methods.embed(ctx, f'Latency', f'{round(client.latency * 1000)}ms')
 
     @client.command(aliases=['restart'])
     @commands.check(Methods.owner)
@@ -158,8 +163,7 @@ class Commands():
     @client.command(aliases=['8ball', 'eightball'])
     async def _8ball(ctx, *, question: str):
         answer = eightball_responses.responses(question)
-        embed = discord.Embed(title=f'🔮 What is it that troubles you?', description=f'{Emoji.hamiltonConfuse} You ask the question, \"**{question.capitalize()}?**\"\n\n{Emoji.hamiltonWisdom} and I answer... \"**{random.choice(answer)}**\"', color=0x55ffff)
-        await ctx.send(embed=embed)
+        await methods.embed(ctx, f'🔮 What is it that troubles you?', f'{Emoji.hamiltonConfuse} You ask the question, \"**{question.capitalize()}?**\"\n\n{Emoji.hamiltonWisdom} and I answer... \"**{random.choice(answer)}**\"')
 
     @client.command(aliases=['zalgo', 'cursed'])
     @commands.has_role(584267156385169419)
@@ -177,12 +181,10 @@ class Commands():
     async def _temperature(ctx, *, temperature: float):
         CtoF = (temperature * 9 / 5) + 32
         FtoC = (temperature - 32) * 5 / 9
-        embed = discord.Embed(title=f'Temperature conversion', description=f'**{temperature}°C** Celsius to Fahrenheit: **{round(CtoF,2)}°F\n\n{temperature}°F** Fahrenheit to Celsius: **{round(FtoC,2)}°C**', color=0x55ffff)
-        await ctx.send(embed=embed)
+        await methods.embed(ctx, f'Temperature conversion', f'**{temperature}°C** Celsius to Fahrenheit: **{round(CtoF,2)}°F\n\n{temperature}°F** Fahrenheit to Celsius: **{round(FtoC,2)}°C**')
 
     @client.command(aliases=['urban', 'ud', 'urbandictionary'])
     async def _urban(ctx, *, word: str):
-        methods = Methods()
         await methods.searchUrban(ctx=ctx, word=word)
 
     @client.command(aliases=['define'])
@@ -236,8 +238,7 @@ class Points():
 
         points = config.getint('points', f'{ctx.message.author.id}.bal')
 
-        embed = discord.Embed(title=f'Deposit', description=f'**{ctx.message.author.name}** has accumulated **{points}** will-o-wisps.', color=0x55ffff)
-        await ctx.send(embed=embed)
+        await methods.embed(ctx, f'Deposit', f'**{ctx.message.author.name}** has accumulated **{points}** will-o-wisps.')
         """img = Image.open('resources\\points_balance.png')
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype('resources\\UASQUARE.TTF', 30)
@@ -264,12 +265,11 @@ class Points():
         def check(m):
             return m.content.lower() == 'ok'
 
-        embed0 = discord.Embed(title='Are you sure you want to do this?', description=f'Do you want to sacrifice **{bet}** will-o-wisps for a chance of a greater blessing? Or worse, a chance to lose it?\n\nType **OK** to continue...', color=0x55ffff)
-        await ctx.send(embed=embed0)
+        await methods.embed(ctx, 'Are you sure you want to do this?', f'Do you want to sacrifice **{bet}** will-o-wisps for a chance of a greater blessing? Or worse, a chance to lose it?\n\nType **OK** to continue...')
         try:
             confirm = await client.wait_for('message', check=check, timeout=10)
         except asyncio.TimeoutError:
-            await ctx.send('You did not respond in time, cancelling coin flip.')
+            await ctx.send(':x: You did not respond in time, cancelling coin flip.')
             return
 
         if(coin.lower() == 'heads'):
@@ -280,11 +280,10 @@ class Points():
             await ctx.send('That is not a side of a coin, moron...')
             return
 
-        embed1 = discord.Embed(title=f'Coinflip', description=response, color=0x55ffff)
-        await ctx.send(embed=embed1)
-        await asyncio.sleep(1)
-        await ctx.send('***Flipping...***')
-        await asyncio.sleep(2)
+        await methods.embed(ctx, title=f'Coinflip', description=response)
+        await asyncio.sleep(1.5)
+        await ctx.send(embed=discord.Embed(title='Flipping...', color=0x55ffff))
+        await asyncio.sleep(3)
         result = random.choice(['heads', 'tails'])
         if(result == 'heads' and coin.lower() == 'heads'):
             response2 = f'The coin landed on {Emoji.heads} heads, you win... {Emoji.hamiltonDread}\n**+ {hamiltonBet}** wisps was added to your account.'
@@ -303,8 +302,7 @@ class Points():
             points -= hamiltonBet + bet
             points += bet
 
-        embed2 = discord.Embed(title=f'Coinflip Result', description=response2, color=0x55ffff)
-        await ctx.send(embed=embed2)
+        await methods.embed(ctx, f'Coinflip Result', response2)
 
         config.set('points', f'{ctx.message.author.id}.bal', str(points))
         write()
