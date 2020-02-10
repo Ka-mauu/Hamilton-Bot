@@ -55,7 +55,7 @@ class Emoji():  # for easy access
     hamiltonEyeroll = '<:okHamiltonEyeroll:630553283890642974>'
     hamiltonWisdom = '<:okHamiltonWisdom:636473613238665227>'
     hamiltonGem = '<:okHamiltonGem:669100365311901698>'
-    heads =  '<:okHeads:676292505427247104>'
+    heads = '<:okHeads:676292505427247104>'
     tails = '<:okTails:676292506832601099>'
 
 
@@ -116,6 +116,12 @@ class Events():
 
 
 class Commands():
+
+    @commands.check(Methods.owner)
+    @client.command(aliases=['oooh', 'ooh', 'oooooh', 'ooooh'])
+    async def _oooh(ctx):
+        await ctx.send('https://cdn.discordapp.com/attachments/489965104784474124/676295367343472640/oooooooooooooooooh.jpg')
+        await ctx.message.delete()
 
     @client.command(aliases=['info'])
     async def _info(ctx):
@@ -345,7 +351,7 @@ class Errors():
     @Points._coinflip.error
     async def _coinflip_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['You need to specify an amount of wisps you\'re willing to bet, then choose heads {Emoji.heads} or tails {Emoji.tails}. The usage goes as follows; `ok.coinflip [amount] [heads/tails]`']
+            r = [f'You need to specify an amount of wisps you\'re willing to bet, then choose heads {Emoji.heads} or tails {Emoji.tails}. The usage goes as follows; `ok.coinflip [amount] [heads/tails]`']
             await ctx.send(f':x: {random.choice(r)}')
 
 
