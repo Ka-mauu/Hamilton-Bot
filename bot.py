@@ -18,24 +18,28 @@ from configparser import ConfigParser
 # prefixes - for some reason the prefixes with spaces have to be first in the list.. /shrug
 client = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'Ok! ', 'oK! ', 'OK! ', 'ok.', 'Ok.', 'oK.', 'OK.', 'ok!', 'Ok!', 'oK!', 'OK!'])
 
+config = ConfigParser()
+datafile = 'data.ini'
+config.read(datafile)
 
-class Config():
+instance = config.getint('main', 'instance')
+status = config.get('main', 'status')
 
-    config = ConfigParser()
-    config.read('data.ini')
+instance += 1  # increase instance integer by 1 on launch
 
-    instance = config.getint('main', 'instance')
-    status = config.get('main', 'status')
+config.set('main', 'instance', str(instance))
 
-    instance += 1  # increase instance integer by 1 on launch
 
-    config.set('main', 'instance', str(instance))
+def write():  # after setting a value you need to call write()
+    with open(datafile, 'w+') as configfile:
+        config.write(configfile)
 
-    def write():
-        with open('data.ini', 'w+') as configfile:
-            config.write(configfile)
 
-    write()
+def read():  # before reading a value you need to call read()
+    config.read(datafile)
+
+
+write()
 
 
 class Emoji():  # for easy access
@@ -87,7 +91,7 @@ class Events():
     async def on_ready():
         print('Hello!')
         # update status
-        await client.change_presence(status=discord.Status.online, activity=discord.Game(Config.status))
+        await client.change_presence(status=discord.Status.online, activity=discord.Game(status))
         await client.get_channel(672942729864413184).send(f'<:okHamiltonOwO:630553287111737354> I have awakened! Serve me and I shall return the favour.')
 
     @client.event
@@ -112,7 +116,7 @@ class Commands():
     @client.command(aliases=['status'])
     @commands.has_role(584267156385169419)
     async def _status(ctx, *, status: str):
-        Config.config.set('main', 'status', str(status))
+        config.set('main', 'status', str(status))
         write()
         await client.change_presence(status=discord.Status.online, activity=discord.Game(status))
         await ctx.send(f'Status set to **{status}**')
@@ -200,6 +204,22 @@ class Commands():
             embed.add_field(name=f'Synonyms', value=f'{synonyms}', inline=False)
         if antonymsList:
             embed.add_field(name=f'Antonyms', value=f'{antonyms}', inline=False)
+        await ctx.send(embed=embed)
+
+
+class Points():
+
+    @client.command(aliases=['points', 'balance', 'bal'])
+    async def _points(ctx):
+        read()
+
+        if not (config.has_option('points', f'{ctx.message.author.id}.bal')):
+            config.set('points', f'{ctx.message.author.id}.bal', '100')
+            write()
+
+        points = config.getint('points', f'{ctx.message.author.id}.bal')
+
+        embed = discord.Embed(title=f'Deposit', description=f'**{ctx.message.author.name}** has accumulated **{points}** will-o-wisps.', color=0x55ffff)
         await ctx.send(embed=embed)
 
 
