@@ -55,6 +55,8 @@ class Emoji():  # for easy access
     hamiltonEyeroll = '<:okHamiltonEyeroll:630553283890642974>'
     hamiltonWisdom = '<:okHamiltonWisdom:636473613238665227>'
     hamiltonGem = '<:okHamiltonGem:669100365311901698>'
+    heads =  '<:okHeads:676292505427247104>'
+    tails = '<:okTails:676292506832601099>'
 
 
 class Methods():
@@ -343,7 +345,7 @@ class Errors():
     @Points._coinflip.error
     async def _coinflip_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['You need to bet an amount of your wisps, then choose heads or tails.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.coinflip [amount] [heads/tails]`']
+            r = ['You need to specify an amount of wisps you\'re willing to bet, then choose heads {Emoji.heads} or tails {Emoji.tails}. The usage goes as follows; `ok.coinflip [amount] [heads/tails]`']
             await ctx.send(f':x: {random.choice(r)}')
 
 
