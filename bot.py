@@ -21,6 +21,8 @@ from PIL import ImageDraw
 # prefixes - for some reason the prefixes with spaces have to be first in the list.. /shrug
 client = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'Ok! ', 'oK! ', 'OK! ', 'ok.', 'Ok.', 'oK.', 'OK.', 'ok!', 'Ok!', 'oK!', 'OK!'])
 
+synonymsStupid = ['stupid', 'dense', 'thick', 'simple', 'dull', 'blockheaded', 'numskulled']
+
 config = ConfigParser()
 datafile = 'data.ini'
 config.read(datafile)
@@ -215,7 +217,7 @@ class Commands():
 
 class Points():
 
-    @client.command(aliases=['points', 'balance', 'bal'])
+    @client.command(aliases=['points', 'balance', 'bal', 'wisps'])
     async def _points(ctx):
         read()
 
@@ -239,16 +241,26 @@ class Points():
         read()
 
         if not (config.has_option('points', f'{ctx.message.author.id}.bal')):
-            await ctx.send(f':x: You do not have any points! Register yourself with **ok.points**')
+            await ctx.send(f':x: You do not have any wisps! Register yourself with `ok.wisps`')
             return
         else:
             points = config.getint('points', f'{ctx.message.author.id}.bal')
 
         if(bet > points):
-            await ctx.send(f':x: You cannot bet more points than you own! You have {points} points.')
+            await ctx.send(f':x: You cannot bet more wisps than you own! You have {points} wisps.')
             return
 
         hamiltonBet = random.randrange(bet, bet * 2)
+
+        def check(m):
+            return m.content.lower() == 'ok'
+
+        await ctx.send(f'Do you want to sacrifice **{bet}** will-o-wisps for a chance of a greater blessing? Or worse, a chance to lose it?\nType **OK** to continue...')
+        try:
+            confirm = await client.wait_for('message', check=check, timeout=5)
+        except asyncio.TimeoutError:
+            await ctx.send('You did not respond in time, cancelling coin flip.')
+            return
 
         if(coin.lower() == 'heads'):
             response = f'You bet **{bet}** on heads. I bet **{hamiltonBet}** on tails!'
@@ -261,22 +273,22 @@ class Points():
         await ctx.send(response)
         await asyncio.sleep(0.5)
         await ctx.send('Flipping...')
-        await asyncio.sleep(1)
+        await asyncio.sleep(1.25)
         result = random.choice(['heads', 'tails'])
         if(result == 'heads' and coin.lower() == 'heads'):
-            await ctx.send(f'The coin landed on heads, you win...\n**+{hamiltonBet + bet - bet}** points was added to your account.')
+            await ctx.send(f'The coin landed on heads, you win...\n**+{hamiltonBet + bet - bet}** wisps was added to your account.')
             points += hamiltonBet + bet
             points -= bet
         elif(result == 'heads' and coin.lower() == 'tails'):
-            await ctx.send(f'The coin landed on heads, I win!\n**-{hamiltonBet + bet}** points was taken from your account.')
+            await ctx.send(f'The coin landed on heads, I win!\n**-{hamiltonBet + bet}** wisps was taken from your account.')
             points -= hamiltonBet + bet
             points += bet
         elif(result == 'tails' and coin.lower() == 'tails'):
-            await ctx.send(f'The coin landed on tails, you win...\n**+{hamiltonBet + bet - bet}** points was added to your account.')
+            await ctx.send(f'The coin landed on tails, you win...\n**+{hamiltonBet + bet - bet}** wisps was added to your account.')
             points += hamiltonBet + bet
             points -= bet
         elif(result == 'tails' and coin.lower() == 'heads'):
-            await ctx.send(f'The coin landed on tails, I win!\n**-{hamiltonBet + bet}** points was taken from your account.')
+            await ctx.send(f'The coin landed on tails, I win!\n**-{hamiltonBet + bet}** wisps was taken from your account.')
             points -= hamiltonBet + bet
             points += bet
 
@@ -289,49 +301,49 @@ class Errors():
     @Commands._say.error
     async def _say_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.', 'Are you too stupid to get this? `ok.say [text]`']
+            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.say [text]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._status.error
     async def _status_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['Are you going to set a status or what?', 'A status cannot contain nothing, bonehead.',  'Try setting my status to something that is not nothing.', 'That is not a proper status, dolt.', 'Are you too stupid to get this? `ok.status [text]`']
+            r = ['Are you going to set a status or what?', 'A status cannot contain nothing, bonehead.',  'Try setting my status to something that is not nothing.', 'That is not a proper status, dolt.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.status [text]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._8ball.error
     async def _8ball_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['Are you going to ask me a question or what?', 'What is it that you want to ask? I am waiting...',  'Ask me a question, dimwit.', 'Will you ask me a question, or no? Make up your mind.', 'Are you too stupid to get this? `ok.8ball [yes/no question]`']
+            r = ['Are you going to ask me a question or what?', 'What is it that you want to ask? I am waiting...',  'Ask me a question, dimwit.', 'Will you ask me a question, or no? Make up your mind.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.8ball [yes/no question]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._zalgo.error
     async def _zalgo_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.', 'Are you too stupid to get this? `ok.zalgo [text]`']
+            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.zalgo [text]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._temperature.error
     async def _temperature_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['I cannot calculate a number that does not exist...', 'Give me something to calculate.', 'Are you too stupid to get this? `ok.temperature [number]`']
+            r = ['I cannot calculate a number that does not exist...', 'Give me something to calculate.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.temperature [number]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._define.error
     async def _define_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['I cannot search for something that does not exist...', 'Give me something to search for.', 'Are you too stupid to get this? `ok.define [word]`']
+            r = ['I cannot search for something that does not exist...', 'Give me something to search for.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.define [word]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._urban.error
     async def _urban_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['I cannot search for something that does not exist...', 'Give me something to search for.', 'Are you too stupid to get this? `ok.urban [word]`']
+            r = ['I cannot search for something that does not exist...', 'Give me something to search for.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.urban [word]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Points._coinflip.error
     async def _coinflip_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['You need to bet an amount of your points, then choose heads or tails.', 'Are you too stupid to get this? `ok.coinflip [amount] [heads/tails]`']
+            r = ['You need to bet an amount of your wisps, then choose heads or tails.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.coinflip [amount] [heads/tails]`']
             await ctx.send(f':x: {random.choice(r)}')
 
 
