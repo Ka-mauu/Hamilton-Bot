@@ -7,13 +7,16 @@ import requests
 import json
 import eightball_responses
 import datetime
+import asyncio
 from nltk.corpus import wordnet
 from urbandict import urbandict
 from discord.ext import commands
 from zalgo_text import zalgo
 from pathlib import Path
 from configparser import ConfigParser
-
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
 
 # prefixes - for some reason the prefixes with spaces have to be first in the list.. /shrug
 client = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'Ok! ', 'oK! ', 'OK! ', 'ok.', 'Ok.', 'oK.', 'OK.', 'ok!', 'Ok!', 'oK!', 'OK!'])
@@ -100,9 +103,12 @@ class Events():
             r = ['That is not a proper command..', 'I cannot perform a non-existent request.', 'Are you going to give me something to do, or what?', 'I cannot just sit here idly, what do you want me to do?']
             await ctx.send(random.choice(r))
         elif isinstance(error, commands.CheckFailure):
-            await ctx.send(':x: You do not have the permissions to perform this command!')
+            await ctx.send(f':x: You do not have the permissions to perform this command!')
+        elif isinstance(error, commands.MissingRequiredArgument):
+            pass
         else:
             print(f'Something went wrong. Error: \n{error, type(error)}\nTime of error: {datetime.datetime.now()}')
+            await ctx.send(f'Something went very wrong, let us laugh at Lerrific\'s incompetence... ```{error, type(error)}```')
 
 
 class Commands():
@@ -221,6 +227,61 @@ class Points():
 
         embed = discord.Embed(title=f'Deposit', description=f'**{ctx.message.author.name}** has accumulated **{points}** will-o-wisps.', color=0x55ffff)
         await ctx.send(embed=embed)
+        """img = Image.open('resources\\points_balance.png')
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype('resources\\UASQUARE.TTF', 30)
+        draw.text((100, 155), 'Test 12345', (0, 0, 0), font=font)
+        img.save('resources\\points_balance_r.png')
+        await ctx.send(file=discord.File('resources\\points_balance_r.png'))"""
+
+    @client.command(aliases=['coinflip'])
+    async def _coinflip(ctx, bet: int, coin: str):
+        read()
+
+        if not (config.has_option('points', f'{ctx.message.author.id}.bal')):
+            await ctx.send(f':x: You do not have any points! Register yourself with **ok.points**')
+            return
+        else:
+            points = config.getint('points', f'{ctx.message.author.id}.bal')
+
+        if(bet > points):
+            await ctx.send(f':x: You cannot bet more points than you own! You have {points} points.')
+            return
+
+        hamiltonBet = random.randrange(bet, bet * 2)
+
+        if(coin.lower() == 'heads'):
+            response = f'You bet **{bet}** on heads. I bet **{hamiltonBet}** on tails!'
+        elif(coin.lower() == 'tails'):
+            response = f'You bet **{bet}** on tails. I bet **{hamiltonBet}** on heads!'
+        else:
+            await ctx.send('That is not a side of a coin, moron...')
+            return
+
+        await ctx.send(response)
+        await asyncio.sleep(0.5)
+        await ctx.send('Flipping...')
+        await asyncio.sleep(1)
+        result = random.choice(['heads', 'tails'])
+        if(result == 'heads' and coin.lower() == 'heads'):
+            await ctx.send(f'The coin landed on heads, you win...\n**+{hamiltonBet + bet - bet}** points was added to your account.')
+            points += hamiltonBet + bet
+            points -= bet
+        elif(result == 'heads' and coin.lower() == 'tails'):
+            await ctx.send(f'The coin landed on heads, I win!\n**-{hamiltonBet + bet}** points was taken from your account.')
+            points -= hamiltonBet + bet
+            points += bet
+        elif(result == 'tails' and coin.lower() == 'tails'):
+            await ctx.send(f'The coin landed on tails, you win...\n**+{hamiltonBet + bet - bet}** points was added to your account.')
+            points += hamiltonBet + bet
+            points -= bet
+        elif(result == 'tails' and coin.lower() == 'heads'):
+            await ctx.send(f'The coin landed on tails, I win!\n**-{hamiltonBet + bet}** points was taken from your account.')
+            points -= hamiltonBet + bet
+            points += bet
+
+        config.set('points', f'{ctx.message.author.id}.bal', str(points))
+        write()
 
 
 class Errors():
@@ -228,31 +289,49 @@ class Errors():
     @Commands._say.error
     async def _say_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.']
+            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.', 'Are you too stupid to get this? `ok.say [text]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._status.error
     async def _status_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['Are you going to set a status or what?', 'A status cannot contain nothing, bonehead.',  'Try setting my status to something that is not nothing.', 'That is not a proper status, dolt.']
+            r = ['Are you going to set a status or what?', 'A status cannot contain nothing, bonehead.',  'Try setting my status to something that is not nothing.', 'That is not a proper status, dolt.', 'Are you too stupid to get this? `ok.status [text]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._8ball.error
     async def _8ball_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['Are you going to ask me a question or what?', 'What is it that you want to ask? I am waiting...',  'Ask me a question, dimwit.', 'Will you ask me a question, or no? Make up your mind.']
+            r = ['Are you going to ask me a question or what?', 'What is it that you want to ask? I am waiting...',  'Ask me a question, dimwit.', 'Will you ask me a question, or no? Make up your mind.', 'Are you too stupid to get this? `ok.8ball [yes/no question]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._zalgo.error
     async def _zalgo_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.']
+            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.', 'Are you too stupid to get this? `ok.zalgo [text]`']
             await ctx.send(f':x: {random.choice(r)}')
 
     @Commands._temperature.error
     async def _temperature_error(ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            r = ['I cannot calculate a number that does not exist...', 'Give me something to calculate.']
+            r = ['I cannot calculate a number that does not exist...', 'Give me something to calculate.', 'Are you too stupid to get this? `ok.temperature [number]`']
+            await ctx.send(f':x: {random.choice(r)}')
+
+    @Commands._define.error
+    async def _define_error(ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            r = ['I cannot search for something that does not exist...', 'Give me something to search for.', 'Are you too stupid to get this? `ok.define [word]`']
+            await ctx.send(f':x: {random.choice(r)}')
+
+    @Commands._urban.error
+    async def _urban_error(ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            r = ['I cannot search for something that does not exist...', 'Give me something to search for.', 'Are you too stupid to get this? `ok.urban [word]`']
+            await ctx.send(f':x: {random.choice(r)}')
+
+    @Points._coinflip.error
+    async def _coinflip_error(ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            r = ['You need to bet an amount of your points, then choose heads or tails.', 'Are you too stupid to get this? `ok.coinflip [amount] [heads/tails]`']
             await ctx.send(f':x: {random.choice(r)}')
 
 
