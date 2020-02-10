@@ -284,7 +284,7 @@ class Points():
         await asyncio.sleep(1.25)
         result = random.choice(['heads', 'tails'])
         if(result == 'heads' and coin.lower() == 'heads'):
-            await ctx.send(f'The coin landed on heads, you win...\n**+ {hamiltonBet + bet - bet}** wisps was added to your account.')
+            await ctx.send(f'The coin landed on heads, you win...\n**+ {hamiltonBet}** wisps was added to your account.')
             points += hamiltonBet + bet
             points -= bet
         elif(result == 'heads' and coin.lower() == 'tails'):
@@ -292,7 +292,7 @@ class Points():
             points -= hamiltonBet + bet
             points += bet
         elif(result == 'tails' and coin.lower() == 'tails'):
-            await ctx.send(f'The coin landed on tails, you win...\n**+ {hamiltonBet + bet - bet}** wisps was added to your account.')
+            await ctx.send(f'The coin landed on tails, you win...\n**+ {hamiltonBet}** wisps was added to your account.')
             points += hamiltonBet + bet
             points -= bet
         elif(result == 'tails' and coin.lower() == 'heads'):
