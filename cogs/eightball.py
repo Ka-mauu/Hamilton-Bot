@@ -1,18 +1,15 @@
 import discord
 import random
-import utils
+from other.utils import *
 from discord.ext import commands
 
 
 class Eightball(commands.Cog):
 
-    u = utils.Utils()
-    e = utils.Emoji()
-
     def __init__(self, client):
         self.client = client
 
-    def responses(question: str):
+    def responses(self, question: str):
 
         q = question.lower()
 
@@ -57,12 +54,16 @@ class Eightball(commands.Cog):
 
             answer = ['Heads.', 'Tails.']
 
+        if q.startswith('am i gay') or q.startswith('am i trans') or q.startswith('am i transgender') or q.startswith('am i bi') or q.startswith('am i bisexual') or q.startswith('am i straight') or q.startswith('am i asexual'):
+
+            answer = ['Ok... Regardless of what you feel you are, just know that you are loved.']
+
         return answer
 
     @commands.command(aliases=['8ball', 'ask'])
     async def eightball(self, ctx, *, question: str):
-        answer = responses(question)
-        await u.embed(ctx, f'🔮 What is it that troubles you?', f'{e.hamiltonConfuse} You ask the question, \"**{question.capitalize()}?**\"\n\n{e.hamiltonWisdom} and I answer... \"**{random.choice(answer)}**\"')
+        answer = self.responses(question)
+        await Utils.embed(ctx, f'🔮 What is it that troubles you?', f'{Emoji.hamiltonConfuse} You ask the question, \"**{question.capitalize()}?**\"\n\n{Emoji.hamiltonWisdom} and I answer... \"**{random.choice(answer)}**\"')
 
 
 def setup(client):

@@ -1,5 +1,6 @@
 import discord
-import random
+
+color = 0x55ffff
 
 
 class Emoji():
@@ -18,5 +19,10 @@ class Emoji():
 
 class Utils():
 
-    async def embed(self, ctx, title: str, description: str):
+    synonymsStupid = ['stupid', 'dense', 'thick', 'simple', 'dull', 'blockheaded', 'numskulled']
+
+    def owner(ctx):
+        return ctx.author.id == 259536485340938242
+
+    async def embed(ctx, title: str, description: str):
         await ctx.send(embed=discord.Embed(title=title, description=description, color=color))
