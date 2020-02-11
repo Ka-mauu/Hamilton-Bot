@@ -3,3 +3,4 @@ data.ini
 __pycache__/
 .gitattributes
 resources/
+.gitignore

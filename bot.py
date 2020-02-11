@@ -5,7 +5,6 @@ import os
 import psutil
 import requests
 import json
-import eightball_responses
 import datetime
 import asyncio
 from nltk.corpus import wordnet
@@ -49,27 +48,26 @@ def read():  # before reading a value you need to call read()
 write()
 
 
-class Emoji():  # for easy access
-    hamiltonConfuse = '<:okHamiltonConfuse:630553287145422871>'
-    hamiltonWoke = '<:okHamiltonWoke:630553285488803850>'
-    hamiltonDread = '<:okHamiltonDread:630553286986039356>'
-    hamiltonOWO = '<:okHamiltonOwO:630553287111737354>'
-    hamiltonEyeroll = '<:okHamiltonEyeroll:630553283890642974>'
-    hamiltonWisdom = '<:okHamiltonWisdom:636473613238665227>'
-    hamiltonGem = '<:okHamiltonGem:669100365311901698>'
-    hamiltonCool = '<:okHamiltonCool:635747888672145408>'
-    heads = '<:okHeads:676292505427247104>'
-    tails = '<:okTails:676292506832601099>'
-    wisp = '<:okWilloWisp:676253396545568770>'
+@client.command()
+async def load(ctx, extension):
+    client.load_extension(f'cogs.{extension}')
+    await ctx.send('Loaded {extension}')
+
+
+@client.command()
+async def unload(ctx, extension):
+    client.unload_extension(f'cogs.{extension}')
+    await ctx.send('Unloaded {extension}')
+
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        client.load_extension(f'cogs.{filename[:-3]}')
 
 
 class Methods():
 
     def owner(ctx):
         return ctx.author.id == 259536485340938242
-
-    async def embed(self, ctx, title: str, description: str):
-        await ctx.send(embed=discord.Embed(title=title, description=description, color=color))
 
     async def searchUrban(self, ctx, *, word: str):
         # this is why you dont code late at night - fix later...
@@ -106,7 +104,7 @@ class Events():
 
     @client.event
     async def on_ready():
-        print('Hello!')
+        print('\nOnline!\n')
         # update status
         await client.change_presence(status=discord.Status.online, activity=discord.Game(status))
         await client.get_channel(672942729864413184).send(f'<:okHamiltonOwO:630553287111737354> I have awakened! Serve me and I shall return the favour.')
@@ -115,7 +113,7 @@ class Events():
     async def on_command_error(ctx, error):
         if isinstance(error, commands.CommandNotFound):
             r = ['That is not a proper command..', 'I cannot perform a non-existent request.', 'Are you going to give me something to do, or what?', 'I cannot just sit here idly, what do you want me to do?']
-            await ctx.send(random.choice(r))
+            await ctx.send(f':x: {random.choice(r)}')
         elif isinstance(error, commands.CheckFailure):
             await ctx.send(f':x: You do not have the permissions to perform this command!')
         elif isinstance(error, commands.MissingRequiredArgument):
@@ -145,10 +143,6 @@ class Commands():
         await client.change_presence(status=discord.Status.online, activity=discord.Game(status))
         await ctx.send(f'Status set to **{status}**')
 
-    @client.command(aliases=['ping'])
-    async def _ping(ctx):
-        await methods.embed(ctx, f'Latency', f'{round(client.latency * 1000)}ms')
-
     @client.command(aliases=['restart'])
     @commands.check(Methods.owner)
     async def _restart(ctx):
@@ -160,11 +154,6 @@ class Commands():
     async def _stop(ctx):
         await ctx.send(f'{Emoji.hamiltonEyeroll} Just for now...')
         sys.exit()
-
-    @client.command(aliases=['8ball', 'eightball'])
-    async def _8ball(ctx, *, question: str):
-        answer = eightball_responses.responses(question)
-        await methods.embed(ctx, f'🔮 What is it that troubles you?', f'{Emoji.hamiltonConfuse} You ask the question, \"**{question.capitalize()}?**\"\n\n{Emoji.hamiltonWisdom} and I answer... \"**{random.choice(answer)}**\"')
 
     @client.command(aliases=['zalgo', 'cursed'])
     @commands.has_role(584267156385169419)
@@ -327,57 +316,6 @@ class Points():
             return
 
         await ctx.send('e')
-
-
-class Errors():
-
-    @Commands._say.error
-    async def _say_error(ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.say [text]`']
-            await ctx.send(f':x: {random.choice(r)}')
-
-    @Commands._status.error
-    async def _status_error(ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            r = ['Are you going to set a status or what?', 'A status cannot contain nothing, bonehead.',  'Try setting my status to something that is not nothing.', 'That is not a proper status, dolt.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.status [text]`']
-            await ctx.send(f':x: {random.choice(r)}')
-
-    @Commands._8ball.error
-    async def _8ball_error(ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            r = ['Are you going to ask me a question or what?', 'What is it that you want to ask? I am waiting...',  'Ask me a question, dimwit.', 'Will you ask me a question, or no? Make up your mind.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.8ball [yes/no question]`']
-            await ctx.send(f':x: {random.choice(r)}')
-
-    @Commands._zalgo.error
-    async def _zalgo_error(ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            r = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.zalgo [text]`']
-            await ctx.send(f':x: {random.choice(r)}')
-
-    @Commands._temperature.error
-    async def _temperature_error(ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            r = ['I cannot calculate a number that does not exist...', 'Give me something to calculate.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.temperature [number]`']
-            await ctx.send(f':x: {random.choice(r)}')
-
-    @Commands._define.error
-    async def _define_error(ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            r = ['I cannot search for something that does not exist...', 'Give me something to search for.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.define [word]`']
-            await ctx.send(f':x: {random.choice(r)}')
-
-    @Commands._urban.error
-    async def _urban_error(ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            r = ['I cannot search for something that does not exist...', 'Give me something to search for.', f'Are you too {random.choice(synonymsStupid)} to get this? `ok.urban [word]`']
-            await ctx.send(f':x: {random.choice(r)}')
-
-    @Points._coinflip.error
-    async def _coinflip_error(ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            r = [f'You need to specify an amount of wisps you\'re willing to bet, then choose heads {Emoji.heads} or tails {Emoji.tails}. The usage goes as follows; `ok.coinflip [amount] [heads/tails]`']
-            await ctx.send(f':x: {random.choice(r)}')
 
 
 client.run(open(Path("../token.txt")).read())
