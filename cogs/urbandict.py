@@ -1,9 +1,11 @@
-import discord
-from discord.ext import commands
 import json
 import urllib.parse
 import urllib.request
-from other.utils import *
+
+import discord
+from discord.ext import commands
+
+from other.utils import Emoji
 
 _URBANDICT_URL = "http://api.urbandictionary.com/v0/define?term="
 
@@ -29,7 +31,7 @@ class UrbanDict(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    async def searchUrban(self, ctx, *, word: str):
+    async def search_urban(self, ctx, *, word: str):
         # this is why you dont code late at night - fix later...
 
         # get the list inside of a list
@@ -37,7 +39,7 @@ class UrbanDict(commands.Cog):
         # make it a string so we can modify it
         tostring = json.dumps(urb)
         if tostring == '[]':
-            await ctx.send(f':x: There is no urban dictionary definition for **{word}**.')
+            await ctx.send(f'{Emoji.hamiltonSleep} There is no urban dictionary definition for **{word}**.')
             return
         if tostring.endswith(']'):
             tostring = tostring[1:-1]  # cut off the square brackets so it's readable as a list
@@ -45,13 +47,13 @@ class UrbanDict(commands.Cog):
         sep = ', {'
         rest = tostring.split(sep, 1)[0]
         # back in to a list
-        u = json.loads(rest)
-        word = u['word']
-        author = u['author']
-        definition = u['definition'].replace("[", "").replace("]", "")
-        example = u['example'].replace("[", "").replace("]", "")
+        urb = json.loads(rest)
+        word = urb['word']
+        author = urb['author']
+        definition = urb['definition'].replace("[", "").replace("]", "")
+        example = urb['example'].replace("[", "").replace("]", "")
 
-        embed = discord.Embed(title=f'{word}', description=f'{definition}', color=color)
+        embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
         embed.add_field(name=f'Example', value=f'{example}', inline=True)
         embed.add_field(name=f'Author', value=f'{author}', inline=True)
         await ctx.send(embed=embed)
@@ -59,7 +61,7 @@ class UrbanDict(commands.Cog):
     @commands.command(aliases=['ud', 'urbandictionary'])
     # @commands.cooldown(rate=3)
     async def urban(self, ctx, *, word: str):
-        await self.searchUrban(ctx=ctx, word=word)
+        await self.search_urban(ctx=ctx, word=word)
 
 
 def setup(client):

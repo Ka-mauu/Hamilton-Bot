@@ -1,12 +1,14 @@
-from discord.ext import commands
-import discord
-from other.utils import *
-import bot
 import os
 import sys
 
+import discord
+from discord.ext import commands
 
-class Owner_Commands(commands.Cog):
+import bot
+from other.utils import Emoji, Utils
+
+
+class OwnerCommands(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -14,7 +16,7 @@ class Owner_Commands(commands.Cog):
     @commands.command(aliases=['playing'])
     @commands.check(Utils.owner)
     async def status(self, ctx, *, status: str):
-        bot.config.set('main', 'status', str(status))
+        bot.CFG.set('main', 'status', str(status))
         await self.client.change_presence(status=discord.Status.online, activity=discord.Game(status))
         await ctx.send(f'Status set to **{status}**')
         bot.write()
@@ -39,4 +41,4 @@ class Owner_Commands(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Owner_Commands(client))
+    client.add_cog(OwnerCommands(client))

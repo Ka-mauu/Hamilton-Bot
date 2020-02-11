@@ -1,7 +1,8 @@
-import discord
 import random
-from other.utils import *
+
 from discord.ext import commands
+
+from other.utils import Utils, Emoji
 
 
 class Eightball(commands.Cog):
@@ -11,7 +12,7 @@ class Eightball(commands.Cog):
 
     def responses(self, question: str):
 
-        q = question.lower()
+        qstn = question.lower()
 
         # default response
 
@@ -20,41 +21,41 @@ class Eightball(commands.Cog):
 
         # responses
 
-        if q.startswith('should') or q.startswith('can'):
+        if qstn.startswith('should') or qstn.startswith('can'):
 
             answer = ['Ok, yeah. That sounds good.', 'Ok, no. Although I really do pity you.', 'Ok, but venture only if you dare...', 'Ok, but do not come crying to me when you inevitably regret it.', 'Ok, I cannot believe how unfathomably dense you are. Goodbye.',
                       'Ok. That is a batshit crazy notion, but I am all for it.', 'Ok, but why are you asking me this?', 'Ok, I honestly could not care less about what you want to do.', 'Ok, do whatever you feel you must do. I shall not judge.', 'Ok, the universe has decided so.']
 
-        if q.startswith('am'):
+        if qstn.startswith('am'):
 
             answer = ['Ok, you definitely show the symptoms, so yes.', 'Ok, you do not show the symptoms, fortunately.', 'Ok, the universe has decided so.',
                       'Ok... Rest assured, because you are not.', 'Ok... Rest assured, because you are.', 'Ok... Regardless of what you feel you are, just know that you are loved.', 'Ok, I raise you a better question... Are you stupid?']
 
-        if q.startswith('is') or q.startswith('does') or q.startswith('do i') or q.startswith('do we') or q.startswith('did') or q.startswith('have'):
+        if qstn.startswith('is') or qstn.startswith('does') or qstn.startswith('do i') or qstn.startswith('do we') or qstn.startswith('did') or qstn.startswith('have'):
 
             answer = ['Ok, I can say yes without a doubt.', 'Ok, I can say no without a doubt.', 'Ok... Well, no, unfortunately.', 'Ok... Well, yes, unfortunately.', 'Ok, I raise you a better question... Are you stupid?',
                       'Ok, the universe has decided so.', 'Ok, I say this with utmost certainty... Yes.', 'Ok, I say this with utmost certainty... No.', 'Ok, I do not think so.', 'Ok, I do believe so.']
 
-        if q.startswith('if') or q.startswith('will') or q.startswith('would') or q.startswith('could') or q.startswith('shall'):
+        if qstn.startswith('if') or qstn.startswith('will') or qstn.startswith('would') or qstn.startswith('could') or qstn.startswith('shall'):
 
             answer = ['Ok, no. Although I really do pity you.', 'Ok, as I see it, you will. Just be cautious.', 'Ok, with all things considered, yes.', 'Ok, I cannot be certain, but I wish you luck.', 'Ok. Fortunately, no.',
                       'Ok, I do not think I can answer this for you.', 'Ok, I do not think you ever will, and it is not wise to try.', 'Ok, you are better off not doing that. I would like to see you try, though.', 'Ok, the universe has decided so.', 'Ok, do whatever you feel you must do. I shall not judge.']
 
         # custom responses
 
-        if q.startswith('are you ok') or q.startswith('r u ok') or q.startswith('are u ok') or q.startswith('r you ok') or q.startswith('are you okay') or q.startswith('r you okay') or q.startswith('r u okay') or q.startswith('are u okay'):
+        if qstn.startswith('are you ok') or qstn.startswith('r u ok') or qstn.startswith('are u ok') or qstn.startswith('r you ok') or qstn.startswith('are you okay') or qstn.startswith('r you okay') or qstn.startswith('r u okay') or qstn.startswith('are u okay'):
 
             answer = ['I am very OK, and so are you! Thank you for asking.']
 
-        if q.startswith('am i ok') or q.startswith('am i okay') or q.startswith('is i okay'):
+        if qstn.startswith('am i ok') or qstn.startswith('am i okay') or qstn.startswith('is i okay'):
 
             answer = ['Have no doubt. Indeed, you are very OK!']
 
-        if q.startswith('heads or tails'):
+        if qstn.startswith('heads or tails'):
 
             answer = ['Heads.', 'Tails.']
 
-        if q.startswith('am i gay') or q.startswith('am i trans') or q.startswith('am i transgender') or q.startswith('am i bi') or q.startswith('am i bisexual') or q.startswith('am i straight') or q.startswith('am i asexual'):
+        if qstn.startswith('am i gay') or qstn.startswith('am i trans') or qstn.startswith('am i transgender') or qstn.startswith('am i bi') or qstn.startswith('am i bisexual') or qstn.startswith('am i straight') or qstn.startswith('am i asexual'):
 
             answer = ['Ok... Regardless of what you feel you are, just know that you are loved.']
 

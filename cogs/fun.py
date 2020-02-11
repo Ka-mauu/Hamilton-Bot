@@ -1,11 +1,12 @@
-from discord.ext import commands
-import discord
-from other.utils import *
-from other.utils import Utils
-from zalgo_text import zalgo
-from nltk.corpus import wordnet
-from cogs.urbandict import UrbanDict
 import json
+
+import discord
+from discord.ext import commands
+from nltk.corpus import wordnet
+from zalgo_text import zalgo
+
+from cogs.urbandict import UrbanDict
+from other.utils import Emoji, Utils
 
 
 class Fun(commands.Cog):
@@ -59,7 +60,7 @@ class Fun(commands.Cog):
 
             # await ctx.send(f'word: {word}  definition: {definition}')
 
-            embed = discord.Embed(title=f'{word}', description=f'{definition}', color=color)
+            embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
             if examplesList:
                 embed.add_field(name=f'Examples', value=f'{examples}', inline=True)
             if synonymsList:
@@ -68,7 +69,7 @@ class Fun(commands.Cog):
                 embed.add_field(name=f'Antonyms', value=f'{antonyms}', inline=False)
             await ctx.send(embed=embed)
         except IndexError:
-            await ctx.send(f':x: There is no definition for **{word}**.')
+            await ctx.send(f'{Emoji.hamiltonSleep} There is no definition for **{word}**.')
             await ctx.send(f'Searching urban dictionary for a definition...')
             await UrbanDict(commands.Cog).searchUrban(ctx=ctx, word=word)
 

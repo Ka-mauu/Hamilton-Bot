@@ -1,14 +1,9 @@
-import discord
-from discord.ext import commands
 import datetime
-from other.utils import *
 import random
-import bot
-from cogs.owner_commands import *
-from cogs.fun import *
-from cogs.eightball import *
-from cogs.misc import *
-from cogs.urbandict import *
+
+from discord.ext import commands
+
+from other.utils import Emoji, Utils
 
 
 class Error_Handling(commands.Cog):
