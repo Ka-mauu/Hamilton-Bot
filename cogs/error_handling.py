@@ -1,5 +1,7 @@
 import datetime
 import random
+import sys
+import traceback
 
 from discord.ext import commands
 
@@ -18,7 +20,7 @@ class Error_Handling(commands.Cog):
             await ctx.send(f':x: {random.choice(reply)}')
         elif isinstance(error, commands.CheckFailure):
             await ctx.send(f':x: You do not have the permissions to perform this command!')
-        elif isinstance(error, commands.MissingRequiredArgument):
+        elif isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.BadArgument):
             cmd = ctx.command.name.lower()
             if cmd == "say":
                 reply = ['What do you need me to say? It cannot be nothing.', 'Give me something to say.', f'Are you too {random.choice(Utils.synonymsStupid)} to get this? `ok.say [text]`']
@@ -45,8 +47,8 @@ class Error_Handling(commands.Cog):
                 reply = [f'You need to specify an amount of wisps you\'re willing to bet, then choose heads {Emoji.heads} or tails {Emoji.tails}. The usage goes as follows; `ok.coinflip [amount] [heads/tails]`']
                 await ctx.send(f':x: {random.choice(reply)}')
         else:
-            print(f'Something went wrong. Error: \n{error, type(error)}\nTime of error: {datetime.datetime.now()}')
-            await ctx.send(f'Something went very wrong, let us laugh at Lerrific\'s incompetence... ```{error, type(error)}```')
+            traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+            await ctx.send(f'Something went very wrong, let us laugh at Lerrific\'s incompetence... ```{type(error), error, error.__traceback__}```'.format(file=sys.stderr))
 
 
 def setup(client):

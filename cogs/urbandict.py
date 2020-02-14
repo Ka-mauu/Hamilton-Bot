@@ -58,8 +58,7 @@ class UrbanDict(commands.Cog):
         embed.add_field(name=f'Author', value=f'{author}', inline=True)
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=['ud', 'urbandictionary'])
-    # @commands.cooldown(rate=3)
+    @commands.command(aliases=['ud', 'urbandictionary'], help='Searches the urban dictionary for a definition of the given word.')
     async def urban(self, ctx, *, word: str):
         await self.search_urban(ctx=ctx, word=word)
 

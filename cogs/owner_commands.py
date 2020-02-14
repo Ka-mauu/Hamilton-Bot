@@ -13,6 +13,27 @@ class OwnerCommands(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    @commands.command()
+    @commands.check(Utils.owner)
+    async def unload(self, ctx, extension):
+        self.client.unload_extension(f'cogs.{extension}')
+        await ctx.send(f'**Unloaded {extension}**')
+
+    @commands.command()
+    @commands.check(Utils.owner)
+    async def load(self, ctx, extension):
+        self.client.load_extension(f'cogs.{extension}')
+        await ctx.send(f'**Loaded {extension}**')
+
+    @commands.command(aliases=['rl'])
+    @commands.check(Utils.owner)
+    async def reload(self, ctx):
+        for filename in os.listdir('./cogs'):
+            if filename.endswith('.py'):
+                self.client.unload_extension(f'cogs.{filename[:-3]}')
+                self.client.load_extension(f'cogs.{filename[:-3]}')
+        await ctx.send(f'**Reloaded all cogs!**')
+
     @commands.command(aliases=['playing'])
     @commands.check(Utils.owner)
     async def status(self, ctx, *, status: str):

@@ -14,26 +14,25 @@ class Fun(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(aliases=['cursed'])
-    @commands.has_role(584267156385169419)
+    @commands.command(aliases=['cursed'], help='Like the say command, except spookier.')
+    # @commands.has_role(584267156385169419)
     async def zalgo(self, ctx, *, text: str):
         await ctx.send(zalgo.zalgo().zalgofy(text))
         await ctx.message.delete()
 
-    @commands.command(aliases=['echo', 'speak'])
-    @commands.has_role(584267156385169419)
+    @commands.command(aliases=['echo', 'speak'], help='Make Hamilton say something.')
+    # @commands.has_role(584267156385169419)
     async def say(self, ctx, *, text: str):
         await ctx.send(text)
         await ctx.message.delete()
 
-    @commands.command(aliases=['temp'])
-    async def temperature(self, ctx, *, temperature: float):
-        CtoF = (temperature * 9 / 5) + 32
-        FtoC = (temperature - 32) * 5 / 9
-        await Utils.embed(ctx, f'Temperature conversion', f'**{temperature}°C** Celsius to Fahrenheit: **{round(CtoF,2)}°F\n\n{temperature}°F** Fahrenheit to Celsius: **{round(FtoC,2)}°C**')
+    @commands.command(aliases=['temp'], help='Calculates the given number to Fahrenheit and Celsius.')
+    async def temperature(self, ctx, *, number: float):
+        CtoF = (number * 9 / 5) + 32
+        FtoC = (number - 32) * 5 / 9
+        await Utils.embed(ctx, f'Temperature conversion', f'**{number}°C** Celsius to Fahrenheit: **{round(CtoF,2)}°F\n\n{number}°F** Fahrenheit to Celsius: **{round(FtoC,2)}°C**')
 
-    @commands.command(aliases=['def'])
-    # @commands.cooldown(rate=3)
+    @commands.command(aliases=['def'], help='Searches for a definiton of the given word.')
     async def define(self, ctx, *, word: str):
         # in all honesty i didn't really bother to try and understand this
         # https://pythonprogramming.net/wordnet-nltk-tutorial/

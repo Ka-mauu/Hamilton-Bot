@@ -4,6 +4,7 @@ from pathlib import Path
 
 import discord
 from discord.ext import commands
+from other.utils import Utils
 
 # prefixes - for some reason the prefixes with spaces have to be first in the list.. /shrug
 BOT = commands.Bot(command_prefix=['ok. ', 'Ok. ', 'oK. ', 'OK. ', 'ok! ', 'Ok! ', 'oK! ', 'OK! ', 'ok.', 'Ok.', 'oK.', 'OK.', 'ok!', 'Ok!', 'oK!', 'OK!'])
@@ -31,21 +32,16 @@ def read():  # before reading a value you need to call read()
 
 write()
 
-
-@BOT.command()
-async def load(ctx, extension):
-    BOT.load_extension(f'cogs.{extension}')
-    await ctx.send('Loaded {extension}')
+BOT.remove_command('help')
 
 
-@BOT.command()
-async def unload(ctx, extension):
-    BOT.unload_extension(f'cogs.{extension}')
-    await ctx.send('Unloaded {extension}')
+def load_cogs():
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            BOT.load_extension(f'cogs.{filename[:-3]}')
 
-for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        BOT.load_extension(f'cogs.{filename[:-3]}')
+
+load_cogs()
 
 
 @BOT.event

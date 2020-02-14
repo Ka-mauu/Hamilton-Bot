@@ -61,7 +61,7 @@ class Eightball(commands.Cog):
 
         return answer
 
-    @commands.command(aliases=['8ball', 'ask'])
+    @commands.command(aliases=['8ball', 'ask'], help='Ask Hamilton a yes or no question, and he will respond appropiately.')
     async def eightball(self, ctx, *, question: str):
         answer = self.responses(question)
         await Utils.embed(ctx, f'🔮 What is it that troubles you?', f'{Emoji.hamiltonConfuse} You ask the question, \"**{question.capitalize()}?**\"\n\n{Emoji.hamiltonWisdom} and I answer... \"**{random.choice(answer)}**\"')

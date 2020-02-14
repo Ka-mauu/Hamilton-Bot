@@ -20,7 +20,7 @@ class Wisps(commands.Cog):
         else:
             return True
 
-    @commands.command(aliases=['balance', 'bal'])
+    @commands.command(aliases=['balance', 'bal'], help='Check your wisp balance.')
     async def wisps(self, ctx):
         bot.read()
 
@@ -32,7 +32,7 @@ class Wisps(commands.Cog):
 
         await Utils.embed(ctx, f'{Emoji.wisp} Deposit', f'**{ctx.message.author.name}** has accumulated **{wisps}** will-o-wisps.')
 
-    @commands.command(aliases=['cointoss'])
+    @commands.command(aliases=['cointoss', 'cointhrow'], usage='<bet> <heads|tails>', help='Bet some wisps on heads or tails and toss a coin against Hamilton to see who predicted correctly!')
     async def coinflip(self, ctx, bet: int, coin: str):
         bot.read()
 
@@ -42,10 +42,17 @@ class Wisps(commands.Cog):
         wisps = bot.CFG.getint('wisps', f'{ctx.message.author.id}.bal')
 
         if bet > wisps:
-            await ctx.send(f':x: You cannot bet more wisps than you own! You have {wisps} wisps.')
+            await ctx.send(f':x: You cannot bet more wisps than you own! You have **{wisps}** wisps.')
             return
 
-        hamilton_bet = random.randrange(bet, bet * 1.5)
+        if bet <= 0:
+            await ctx.send(f':x: You cannot bet less than 1 wisp! You have **{wisps}** wisps.')
+            return
+
+        if bet >= 10:
+            hamilton_bet: int = random.randrange(bet, bet * 2)
+        else:
+            hamilton_bet: int = bet * 2
 
         def check(message):
             return message.content.lower() == 'ok'
