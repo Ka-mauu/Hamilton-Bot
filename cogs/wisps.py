@@ -78,19 +78,19 @@ class Wisps(commands.Cog):
         await asyncio.sleep(2)
         result = random.choice(['heads', 'tails'])
         if result == 'heads' and coin.lower() == 'heads':
-            response2 = f'The coin landed on heads {Emoji.heads}, you win... {Emoji.hamiltonDread}\n**+ {hamilton_bet}** wisps was added to your account.'
+            response2 = f'The coin landed on heads {Emoji.heads}, you win... {Emoji.hamiltonDread}\n**+ {hamilton_bet}** wisps were added to your account.'
             wisps += hamilton_bet + bet
             wisps -= bet
         elif result == 'heads' and coin.lower() == 'tails':
-            response2 = f'The coin landed on heads {Emoji.heads}, I win! {Emoji.hamiltonCool}\n**- {hamilton_bet + bet}** wisps was taken from your account.'
+            response2 = f'The coin landed on heads {Emoji.heads}, I win! {Emoji.hamiltonCool}\n**- {hamilton_bet + bet}** wisps were taken from your account.'
             wisps -= hamilton_bet + bet
             wisps += bet
         elif result == 'tails' and coin.lower() == 'tails':
-            response2 = f'The coin landed on tails {Emoji.tails}, you win... {Emoji.hamiltonDread}\n**+ {hamilton_bet}** wisps was added to your account.'
+            response2 = f'The coin landed on tails {Emoji.tails}, you win... {Emoji.hamiltonDread}\n**+ {hamilton_bet}** wisps were added to your account.'
             wisps += hamilton_bet + bet
             wisps -= bet
         elif result == 'tails' and coin.lower() == 'heads':
-            response2 = f'The coin landed on tails {Emoji.tails}, I win! {Emoji.hamiltonCool}\n**- {hamilton_bet + bet}** wisps was taken from your account.'
+            response2 = f'The coin landed on tails {Emoji.tails}, I win! {Emoji.hamiltonCool}\n**- {hamilton_bet + bet}** wisps were taken from your account.'
             wisps -= hamilton_bet + bet
             wisps += bet
 
