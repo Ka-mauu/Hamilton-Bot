@@ -1,0 +1,5 @@
+git+https://github.com/Rapptz/discord.py
+psutil==5.6.7
+nltk==3.4.5
+zalgo_text==0.6
+Pillow==7.0.0

@@ -52,4 +52,5 @@ async def on_ready():
     await BOT.get_channel(672942729864413184).send(f'<:okHamiltonOwO:630553287111737354> I have awakened! Serve me and I shall return the favour.')
 
 
-BOT.run(open(Path("../token.txt")).read())
+#BOT.run(open(Path("../token.txt")).read())
+BOT.run('NjcyOTM1OTgwMjM1MjI3MTM3.XjdIeA.6g4m8uyHkkdMwDJ499tDGvIGMDI')
