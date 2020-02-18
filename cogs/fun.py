@@ -57,8 +57,6 @@ class Fun(commands.Cog):
             antonyms = json.dumps(antonymsList).replace("\"", "").replace("[", "").replace("]", "").replace("_", " ")
             examples = json.dumps(examplesList).replace("\'", "").replace("[", "").replace("]", "")
 
-            # await ctx.send(f'word: {word}  definition: {definition}')
-
             embed = discord.Embed(title=f'{word}', description=f'{definition}', color=0x55ffff)
             if examplesList:
                 embed.add_field(name=f'Examples', value=f'{examples}', inline=True)
@@ -70,7 +68,8 @@ class Fun(commands.Cog):
         except IndexError:
             await ctx.send(f'{Emoji.hamiltonSleep} There is no definition for **{word}**.')
             await ctx.send(f'Searching urban dictionary for a definition...')
-            await UrbanDict(commands.Cog).searchUrban(ctx=ctx, word=word)
+            urbandict = UrbanDict(client=self.client)
+            await urbandict.search_urban(ctx=ctx, word=word)
 
 
 def setup(client):
