@@ -1,6 +1,4 @@
-import json
-
-import discord
+from datetime import datetime
 from discord.ext import commands
 from nltk.corpus import wordnet
 from zalgo_text import zalgo
@@ -17,12 +15,14 @@ class Fun(commands.Cog):
     @commands.command(aliases=['cursed'], help='Like the say command, except spookier.')
     # @commands.has_role(584267156385169419)
     async def zalgo(self, ctx, *, text: str):
+        print(f'User {ctx.author.name} used zalgo to say "{text}" in channel {ctx.channel.name} at {datetime.now().time()}')
         await ctx.send(zalgo.zalgo().zalgofy(text))
         await ctx.message.delete()
 
     @commands.command(aliases=['echo', 'speak'], help='Make Hamilton say something.')
     # @commands.has_role(584267156385169419)
     async def say(self, ctx, *, text: str):
+        print(f'User {ctx.author.name} used echo to say "{text}" in channel {ctx.channel.name} at {datetime.now().time()}')
         await ctx.send(text)
         await ctx.message.delete()
 

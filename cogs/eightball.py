@@ -53,7 +53,7 @@ class Eightball(commands.Cog):
 
         if qstn.startswith('heads or tails'):
 
-            answer = ['Heads.', 'Tails.']
+            answer = ['Ok, I say heads.', 'Ok, I say tails.']
 
         if qstn.startswith('am i gay') or qstn.startswith('am i trans') or qstn.startswith('am i transgender') or qstn.startswith('am i bi') or qstn.startswith('am i bisexual') or qstn.startswith('am i straight') or qstn.startswith('am i asexual'):
 
